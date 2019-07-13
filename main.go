@@ -23,11 +23,28 @@ var rootCmd = &cobra.Command{
 			return
 		}
 
-		filename := "README.md"
-		data, err := ioutil.ReadFile(filename)
-		if err != nil {
-			panic("Read Error!")
+		var filename string
+		var data []byte
+		var err error
+
+		if len(args) < 1 {
+			cmd.Help()
+			return
+		} else if false {
+			// TODO
+			filename = "-"
+			data, err = ioutil.ReadAll(os.Stdin)
+			if err != nil {
+				panic("Read Error!")
+			}
+		} else {
+			filename = args[0]
+			data, err = ioutil.ReadFile(filename)
+			if err != nil {
+				panic("Read Error!")
+			}
 		}
+
 		style := styles.Get("swapoff")
 		lexer := lexers.Match(filename)
 		formatter := formatters.Get("terminal256")
@@ -43,4 +60,3 @@ func init() {
 func main() {
 	rootCmd.Execute()
 }
-
