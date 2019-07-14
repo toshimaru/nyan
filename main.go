@@ -22,23 +22,21 @@ var rootCmd = &cobra.Command{
 			cmd.Println("Version 0.0.0 (not yet released)")
 			return
 		}
-
-		var filename string
-		var data []byte
-		var err error
-
 		if len(args) < 1 {
 			cmd.Help()
 			return
-		} else if false {
-			// TODO
-			filename = "-"
+		}
+
+		var data []byte
+		var err error
+
+		filename := args[0]
+		if filename == "-" {
 			data, err = ioutil.ReadAll(os.Stdin)
 			if err != nil {
 				panic("Read Error!")
 			}
 		} else {
-			filename = args[0]
 			data, err = ioutil.ReadFile(filename)
 			if err != nil {
 				panic("Read Error!")
@@ -47,6 +45,9 @@ var rootCmd = &cobra.Command{
 
 		style := styles.Get("swapoff")
 		lexer := lexers.Match(filename)
+		if lexer == nil {
+			lexer = lexers.Fallback
+		}
 		formatter := formatters.Get("terminal256")
 		iterator, _ := lexer.Tokenise(nil, string(data))
 		formatter.Format(os.Stdout, style, iterator)
