@@ -17,14 +17,14 @@ var rootCmd = &cobra.Command{
 	Short:   "Colorized cat",
 	Long:    "Colorized cat",
 	Example: `$ nyan FILE`,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		if showVersion {
 			cmd.Println("Version 0.0.0 (not yet released)")
-			return
+			return nil
 		}
 		if len(args) < 1 {
 			cmd.Help()
-			return
+			return nil
 		}
 
 		var data []byte
@@ -34,12 +34,12 @@ var rootCmd = &cobra.Command{
 		if filename == "-" {
 			data, err = ioutil.ReadAll(os.Stdin)
 			if err != nil {
-				panic("Read Error!")
+				return err
 			}
 		} else {
 			data, err = ioutil.ReadFile(filename)
 			if err != nil {
-				panic("Read Error!")
+				return err
 			}
 		}
 
@@ -51,6 +51,7 @@ var rootCmd = &cobra.Command{
 		formatter := formatters.Get("terminal256")
 		iterator, _ := lexer.Tokenise(nil, string(data))
 		formatter.Format(os.Stdout, style, iterator)
+		return nil
 	},
 }
 
