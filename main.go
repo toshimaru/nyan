@@ -32,13 +32,11 @@ var rootCmd = &cobra.Command{
 
 		filename := args[0]
 		if filename == "-" {
-			data, err = ioutil.ReadAll(os.Stdin)
-			if err != nil {
+			if data, err = ioutil.ReadAll(os.Stdin); err != nil {
 				return err
 			}
 		} else {
-			data, err = ioutil.ReadFile(filename)
-			if err != nil {
+			if data, err = ioutil.ReadFile(filename); err != nil {
 				return err
 			}
 		}
@@ -48,9 +46,8 @@ var rootCmd = &cobra.Command{
 			lexer = lexers.Fallback
 		}
 		iterator, _ := lexer.Tokenise(nil, string(data))
-		style := styles.Get("monokai")
 		formatter := formatters.Get("terminal256")
-		formatter.Format(os.Stdout, style, iterator)
+		formatter.Format(os.Stdout, styles.Get("monokai"), iterator)
 		return nil
 	},
 }
