@@ -17,14 +17,14 @@ var rootCmd = &cobra.Command{
 	Short:   "Colorized cat",
 	Long:    "Colorized cat",
 	Example: `$ nyan FILE`,
-	Run: func(cmd *cobra.Command, args []string) {
+	RunE: func(cmd *cobra.Command, args []string) error {
 		if showVersion {
 			cmd.Println("Version 0.0.0 (not yet released)")
-			return
+			return nil
 		}
 		if len(args) < 1 {
 			cmd.Help()
-			return
+			return nil
 		}
 
 		var data []byte
@@ -32,25 +32,23 @@ var rootCmd = &cobra.Command{
 
 		filename := args[0]
 		if filename == "-" {
-			data, err = ioutil.ReadAll(os.Stdin)
-			if err != nil {
-				panic("Read Error!")
+			if data, err = ioutil.ReadAll(os.Stdin); err != nil {
+				return err
 			}
 		} else {
-			data, err = ioutil.ReadFile(filename)
-			if err != nil {
-				panic("Read Error!")
+			if data, err = ioutil.ReadFile(filename); err != nil {
+				return err
 			}
 		}
 
-		style := styles.Get("swapoff")
 		lexer := lexers.Match(filename)
 		if lexer == nil {
 			lexer = lexers.Fallback
 		}
-		formatter := formatters.Get("terminal256")
 		iterator, _ := lexer.Tokenise(nil, string(data))
-		formatter.Format(os.Stdout, style, iterator)
+		formatter := formatters.Get("terminal256")
+		formatter.Format(os.Stdout, styles.Get("monokai"), iterator)
+		return nil
 	},
 }
 
@@ -59,5 +57,7 @@ func init() {
 }
 
 func main() {
-	rootCmd.Execute()
+	if err := rootCmd.Execute(); err != nil {
+		os.Exit(1)
+	}
 }
