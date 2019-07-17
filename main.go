@@ -43,13 +43,13 @@ var rootCmd = &cobra.Command{
 			}
 		}
 
-		style := styles.Get("swapoff")
 		lexer := lexers.Match(filename)
 		if lexer == nil {
 			lexer = lexers.Fallback
 		}
-		formatter := formatters.Get("terminal256")
 		iterator, _ := lexer.Tokenise(nil, string(data))
+		style := styles.Get("monokai")
+		formatter := formatters.Get("terminal256")
 		formatter.Format(os.Stdout, style, iterator)
 		return nil
 	},
