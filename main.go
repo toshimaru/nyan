@@ -6,8 +6,8 @@ import (
 
 	"github.com/alecthomas/chroma/formatters"
 	"github.com/alecthomas/chroma/lexers"
-	"github.com/alecthomas/chroma/styles"
 	"github.com/spf13/cobra"
+	"github.com/toshimaru/nyan/styles"
 )
 
 var showVersion bool
