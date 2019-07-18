@@ -10,7 +10,10 @@ import (
 	"github.com/toshimaru/nyan/styles"
 )
 
-var showVersion bool
+var (
+	showVersion bool
+	theme       string
+)
 
 var rootCmd = &cobra.Command{
 	Use:     "nyan [FILE]",
@@ -47,13 +50,14 @@ var rootCmd = &cobra.Command{
 		}
 		iterator, _ := lexer.Tokenise(nil, string(data))
 		formatter := formatters.Get("terminal256")
-		formatter.Format(os.Stdout, styles.Get("monokai"), iterator)
+		formatter.Format(os.Stdout, styles.Get(theme), iterator)
 		return nil
 	},
 }
 
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&showVersion, "version", "v", false, `show version`)
+	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", "color theme")
 }
 
 func main() {
