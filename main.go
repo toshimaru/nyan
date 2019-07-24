@@ -50,7 +50,7 @@ var rootCmd = &cobra.Command{
 		}
 		iterator, _ := lexer.Tokenise(nil, string(data))
 		formatter := formatters.Get("terminal256")
-		formatter.Format(os.Stdout, styles.Get(theme), iterator)
+		formatter.Format(cmd.OutOrStdout(), styles.Get(theme), iterator)
 		return nil
 	},
 }

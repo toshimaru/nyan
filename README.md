@@ -2,8 +2,10 @@
 
 # nyan
 
-cat-like command.
+Colorized cat command.
 
-## Inspiration
+## What is nyan?
 
-Inspired by [nyan-cat](http://www.nyan.cat/).
+`nyan` originated from [nyan-cat](http://www.nyan.cat/).
+
+![nyancat](https://giphygifs.s3.amazonaws.com/media/sIIhZliB2McAo/giphy.gif)
