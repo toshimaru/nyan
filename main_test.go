@@ -34,3 +34,23 @@ func TestInvalidFilename(t *testing.T) {
 	assert.NotNil(t, err)
 	assert.Contains(t, o.String(), "Error: open InvalidFilename: no such file or directory")
 }
+
+func TestExecute(t *testing.T) {
+	o := bytes.NewBufferString("")
+	rootCmd.SetArgs([]string{"testdata/dummy.go"})
+	rootCmd.SetOutput(o)
+	err := rootCmd.Execute()
+
+	assert.Nil(t, err)
+	assert.NotNil(t, o.String())
+}
+
+func TestVersionFlag(t *testing.T) {
+	o := bytes.NewBufferString("")
+	rootCmd.SetArgs([]string{"-v"})
+	rootCmd.SetOutput(o)
+	err := rootCmd.Execute()
+
+	assert.Nil(t, err)
+	assert.Contains(t, o.String(), "Version 0.0.0")
+}
