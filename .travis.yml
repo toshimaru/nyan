@@ -1,16 +1,18 @@
 language: go
-
 go:
   - "1.12.x"
-
 env:
   global:
     - GO111MODULE=on
     - CC_TEST_REPORTER_ID=f4c78effd3a10a5a45239e6886b35f42475467ad53f09a01002feeb04eb92d5b
-
 install:
   - go mod download
-
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
 script:
   - go fmt ./...
   - go test ./... -coverprofile=cover.out
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
