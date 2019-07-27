@@ -7,6 +7,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestMain(m *testing.M) {
+	resetFlags()
+	m.Run()
+}
+
 func TestCommandExecute(t *testing.T) {
 	err := rootCmd.Execute()
 
@@ -15,7 +20,7 @@ func TestCommandExecute(t *testing.T) {
 
 func TestHelpCommand(t *testing.T) {
 	o := bytes.NewBufferString("")
-	rootCmd.SetOutput(o)
+	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -28,7 +33,7 @@ func TestHelpCommand(t *testing.T) {
 func TestInvalidFilename(t *testing.T) {
 	o := bytes.NewBufferString("")
 	rootCmd.SetArgs([]string{"InvalidFilename"})
-	rootCmd.SetOutput(o)
+	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 
 	assert.NotNil(t, err)
@@ -38,7 +43,7 @@ func TestInvalidFilename(t *testing.T) {
 func TestExecute(t *testing.T) {
 	o := bytes.NewBufferString("")
 	rootCmd.SetArgs([]string{"testdata/dummy.go"})
-	rootCmd.SetOutput(o)
+	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -49,7 +54,7 @@ func TestExecute(t *testing.T) {
 func TestInvalidTheme(t *testing.T) {
 	o := bytes.NewBufferString("")
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "-t", "invalid"})
-	rootCmd.SetOutput(o)
+	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -60,7 +65,7 @@ func TestInvalidTheme(t *testing.T) {
 func TestValidTheme(t *testing.T) {
 	o := bytes.NewBufferString("")
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "-t", "vim"})
-	rootCmd.SetOutput(o)
+	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -71,9 +76,25 @@ func TestValidTheme(t *testing.T) {
 func TestVersionFlag(t *testing.T) {
 	o := bytes.NewBufferString("")
 	rootCmd.SetArgs([]string{"-v"})
-	rootCmd.SetOutput(o)
+	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
 	assert.Contains(t, o.String(), "Version 0.0.0")
+}
+
+func TestUnknownFile(t *testing.T) {
+	o := bytes.NewBufferString("")
+	rootCmd.SetArgs([]string{"testdata/dummyfile"})
+	rootCmd.SetOut(o)
+	err := rootCmd.Execute()
+
+	assert.Nil(t, err)
+	assert.NotNil(t, o.String())
+	assert.Contains(t, o.String(), "This is dummy.")
+}
+
+func resetFlags() {
+	showVersion = false
+	theme = "monokai"
 }
