@@ -13,6 +13,6 @@ before_script:
   - ./cc-test-reporter before-build
 script:
   - go fmt ./...
-  - go test ./... -coverprofile=cover.out
+  - go test ./... -coverprofile c.out
 after_script:
   - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
