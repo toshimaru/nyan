@@ -35,7 +35,7 @@ var rootCmd = &cobra.Command{
 
 		filename := args[0]
 		if filename == "-" {
-			if data, err = ioutil.ReadAll(os.Stdin); err != nil {
+			if data, err = ioutil.ReadAll(cmd.InOrStdin()); err != nil {
 				return err
 			}
 		} else {

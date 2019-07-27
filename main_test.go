@@ -7,11 +7,6 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestMain(m *testing.M) {
-	resetFlags()
-	m.Run()
-}
-
 func TestCommandExecute(t *testing.T) {
 	err := rootCmd.Execute()
 
@@ -78,6 +73,7 @@ func TestVersionFlag(t *testing.T) {
 	rootCmd.SetArgs([]string{"-v"})
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
+	resetFlags()
 
 	assert.Nil(t, err)
 	assert.Contains(t, o.String(), "Version 0.0.0")
@@ -92,6 +88,19 @@ func TestUnknownFile(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), "This is dummy.")
+}
+
+func TestFromStdIn(t *testing.T) {
+	o := bytes.NewBufferString("")
+	i := bytes.NewBufferString("abc")
+	rootCmd.SetArgs([]string{"-"})
+	rootCmd.SetOut(o)
+	rootCmd.SetIn(i)
+	err := rootCmd.Execute()
+
+	assert.Nil(t, err)
+	assert.NotNil(t, o.String())
+	assert.Contains(t, o.String(), "abc")
 }
 
 func resetFlags() {
