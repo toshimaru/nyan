@@ -3,9 +3,11 @@ language: go
 go:
   - "1.12.x"
 
+env:
+  - GO111MODULE=on
 install:
-  - env GO111MODULE=on go mod download
+  - go mod download
 
 script:
-  - env GO111MODULE=on go fmt ./...
-  - env GO111MODULE=on go test ./...
+  - go fmt ./...
+  - go test ./... -coverprofile=cover.out
