@@ -92,7 +92,7 @@ func TestUnknownFile(t *testing.T) {
 
 func TestFromStdIn(t *testing.T) {
 	o := bytes.NewBufferString("")
-	i := bytes.NewBufferString("abc")
+	i := bytes.NewBufferString("TestFromStdIn")
 	rootCmd.SetArgs([]string{"-"})
 	rootCmd.SetOut(o)
 	rootCmd.SetIn(i)
@@ -100,7 +100,7 @@ func TestFromStdIn(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), "abc")
+	assert.Contains(t, o.String(), "TestFromStdIn")
 }
 
 func resetFlags() {

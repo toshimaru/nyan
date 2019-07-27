@@ -6,6 +6,12 @@
 
 Colorized cat command.
 
+## Installation
+
+```console
+$ go get github.com/toshimaru/nyan
+```
+
 ## What is nyan?
 
 `nyan` originated from [nyan-cat](http://www.nyan.cat/).
