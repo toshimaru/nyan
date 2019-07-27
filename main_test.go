@@ -7,7 +7,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var o bytes.Buffer
+
 func TestMain(m *testing.M) {
+	o := bytes.NewBufferString("")
+	rootCmd.SetOut(o)
 	resetFlags()
 	m.Run()
 }
@@ -19,8 +23,6 @@ func TestCommandExecute(t *testing.T) {
 }
 
 func TestHelpCommand(t *testing.T) {
-	o := bytes.NewBufferString("")
-	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -31,9 +33,7 @@ func TestHelpCommand(t *testing.T) {
 }
 
 func TestInvalidFilename(t *testing.T) {
-	o := bytes.NewBufferString("")
 	rootCmd.SetArgs([]string{"InvalidFilename"})
-	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 
 	assert.NotNil(t, err)
@@ -41,9 +41,7 @@ func TestInvalidFilename(t *testing.T) {
 }
 
 func TestExecute(t *testing.T) {
-	o := bytes.NewBufferString("")
 	rootCmd.SetArgs([]string{"testdata/dummy.go"})
-	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -52,9 +50,7 @@ func TestExecute(t *testing.T) {
 }
 
 func TestInvalidTheme(t *testing.T) {
-	o := bytes.NewBufferString("")
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "-t", "invalid"})
-	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -63,9 +59,7 @@ func TestInvalidTheme(t *testing.T) {
 }
 
 func TestValidTheme(t *testing.T) {
-	o := bytes.NewBufferString("")
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "-t", "vim"})
-	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -74,9 +68,7 @@ func TestValidTheme(t *testing.T) {
 }
 
 func TestVersionFlag(t *testing.T) {
-	o := bytes.NewBufferString("")
 	rootCmd.SetArgs([]string{"-v"})
-	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -84,9 +76,7 @@ func TestVersionFlag(t *testing.T) {
 }
 
 func TestUnknownFile(t *testing.T) {
-	o := bytes.NewBufferString("")
 	rootCmd.SetArgs([]string{"testdata/dummyfile"})
-	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
