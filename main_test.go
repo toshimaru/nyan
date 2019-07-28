@@ -105,5 +105,4 @@ func TestFromStdIn(t *testing.T) {
 
 func resetFlags() {
 	showVersion = false
-	theme = "monokai"
 }
