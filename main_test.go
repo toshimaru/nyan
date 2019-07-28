@@ -35,7 +35,7 @@ func TestInvalidFilename(t *testing.T) {
 	assert.Contains(t, o.String(), "Error: open InvalidFilename: no such file or directory")
 }
 
-func Execute(t *testing.T) {
+func TestExecute(t *testing.T) {
 	o := bytes.NewBufferString("")
 	rootCmd.SetArgs([]string{"testdata/dummy.go"})
 	rootCmd.SetOut(o)
@@ -57,9 +57,9 @@ func TestInvalidTheme(t *testing.T) {
 	assert.Contains(t, o.String(), "[1m[38;5;231mpackage")
 }
 
-func ValidTheme(t *testing.T) {
+func TestValidTheme(t *testing.T) {
 	o := bytes.NewBufferString("")
-	rootCmd.SetArgs([]string{"testdata/dummy.go", "-t", "swapoff"})
+	rootCmd.SetArgs([]string{"testdata/dummy.go", "-t", "vim"})
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 
