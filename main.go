@@ -57,7 +57,7 @@ var rootCmd = &cobra.Command{
 
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&showVersion, "version", "v", false, `show version`)
-	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", "color theme")
+	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "swapoff", "color theme")
 }
 
 func main() {
