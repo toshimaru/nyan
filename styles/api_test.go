@@ -3,6 +3,7 @@ package styles
 import (
 	"testing"
 
+	"github.com/alecthomas/chroma"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -22,4 +23,11 @@ func TestGetInvalidStyle(t *testing.T) {
 	style := Get("invalid-style")
 
 	assert.Equal(t, "swapoff", style.Name)
+}
+
+func TestRegister(t *testing.T) {
+	nesStyle := chroma.MustNewStyle("newstyle", chroma.StyleEntries{})
+	style := Register(nesStyle)
+
+	assert.Equal(t, "newstyle", style.Name)
 }
