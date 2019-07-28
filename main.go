@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/formatters"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/spf13/cobra"
@@ -25,26 +26,26 @@ var rootCmd = &cobra.Command{
 			cmd.Println("Version 0.0.0 (not yet released)")
 			return nil
 		}
-		if len(args) < 1 {
-			cmd.Help()
-			return nil
-		}
 
 		var data []byte
 		var err error
+		var lexer chroma.Lexer
 
-		filename := args[0]
-		if filename == "-" {
-			if data, err = ioutil.ReadAll(cmd.InOrStdin()); err != nil {
+		if len(args) < 1 || args[0] == "-" {
+			in := cmd.InOrStdin()
+			data, err = ioutil.ReadAll(in)
+			if err != nil {
 				return err
 			}
+			lexer = lexers.Analyse(string(data))
 		} else {
+			filename := args[0]
 			if data, err = ioutil.ReadFile(filename); err != nil {
 				return err
 			}
+			lexer = lexers.Match(filename)
 		}
 
-		lexer := lexers.Match(filename)
 		if lexer == nil {
 			lexer = lexers.Fallback
 		}
