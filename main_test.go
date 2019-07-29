@@ -15,8 +15,10 @@ func TestCommandExecute(t *testing.T) {
 
 func TestHelpCommand(t *testing.T) {
 	o := bytes.NewBufferString("")
+	rootCmd.SetArgs([]string{"--help"})
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
+	resetFlags()
 
 	assert.Nil(t, err)
 	assert.Contains(t, o.String(), rootCmd.Use)
@@ -105,4 +107,5 @@ func TestFromStdIn(t *testing.T) {
 
 func resetFlags() {
 	showVersion = false
+	rootCmd.Flags().Set("help", "false")
 }
