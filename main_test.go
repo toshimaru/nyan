@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"os/exec"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -119,6 +120,39 @@ func TestFromStdInWithDash(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), "TestFromStdIn")
+}
+
+func TestShell(t *testing.T) {
+	t.Run("echo+pipe", func(t *testing.T) {
+		cmd := exec.Command("bash", "-c", "echo pipetest | ./nyan")
+		var o bytes.Buffer
+		cmd.Stdout = &o
+		err := cmd.Run()
+		assert.Nil(t, err)
+		assert.NotNil(t, o.String())
+		assert.Contains(t, o.String(), "pipetest")
+	})
+
+	t.Run("< input", func(t *testing.T) {
+		cmd := exec.Command("bash", "-c", "./nyan < testdata/dummyfile")
+		var o bytes.Buffer
+		cmd.Stdout = &o
+		err := cmd.Run()
+		assert.Nil(t, err)
+		assert.NotNil(t, o.String())
+		assert.Contains(t, o.String(), "This is dummy.")
+	})
+
+	t.Run("< input over echo+pipe", func(t *testing.T) {
+		cmd := exec.Command("bash", "-c", "echo pipetest | ./nyan testdata/dummyfile")
+		var o bytes.Buffer
+		cmd.Stdout = &o
+		err := cmd.Run()
+		assert.Nil(t, err)
+		assert.NotNil(t, o.String())
+		assert.NotContains(t, o.String(), "pipetest")
+		assert.Contains(t, o.String(), "This is dummy.")
+	})
 }
 
 func resetFlags() {
