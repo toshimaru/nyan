@@ -47,8 +47,7 @@ func cmdMain(cmd *cobra.Command, args []string) error {
 
 	if len(args) < 1 || args[0] == "-" {
 		in := cmd.InOrStdin()
-		data, err = ioutil.ReadAll(in)
-		if err != nil {
+		if data, err = ioutil.ReadAll(in); err != nil {
 			return err
 		}
 		lexer = lexers.Analyse(string(data))

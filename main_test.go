@@ -34,6 +34,7 @@ func TestInvalidFilename(t *testing.T) {
 	err := rootCmd.Execute()
 
 	assert.NotNil(t, err)
+	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), "Error: open InvalidFilename: no such file or directory")
 }
 
@@ -64,6 +65,7 @@ func TestValidTheme(t *testing.T) {
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "-t", "vim"})
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
+	resetTheme()
 
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
@@ -78,6 +80,7 @@ func TestVersionFlag(t *testing.T) {
 	resetFlags()
 
 	assert.Nil(t, err)
+	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), "Version 0.0.0")
 }
 
@@ -93,11 +96,24 @@ func TestUnknownFile(t *testing.T) {
 }
 
 func TestFromStdIn(t *testing.T) {
+	i := bytes.NewBufferString("package main")
 	o := bytes.NewBufferString("")
-	i := bytes.NewBufferString("TestFromStdIn")
-	rootCmd.SetArgs([]string{"-"})
-	rootCmd.SetOut(o)
+	rootCmd.SetArgs([]string{})
 	rootCmd.SetIn(i)
+	rootCmd.SetOut(o)
+	err := rootCmd.Execute()
+
+	assert.Nil(t, err)
+	assert.NotNil(t, o.String())
+	assert.Contains(t, o.String(), "[38;5;197mpackage[0m[38;5;231m")
+}
+
+func TestFromStdInWithDash(t *testing.T) {
+	i := bytes.NewBufferString("TestFromStdIn")
+	o := bytes.NewBufferString("")
+	rootCmd.SetArgs([]string{"-"})
+	rootCmd.SetIn(i)
+	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -108,4 +124,8 @@ func TestFromStdIn(t *testing.T) {
 func resetFlags() {
 	showVersion = false
 	rootCmd.Flags().Set("help", "false")
+}
+
+func resetTheme() {
+	theme = "monokai"
 }
