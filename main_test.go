@@ -133,7 +133,7 @@ func TestShell(t *testing.T) {
 		assert.Contains(t, o.String(), "pipetest")
 	})
 
-	t.Run("< input", func(t *testing.T) {
+	t.Run("< StdInput", func(t *testing.T) {
 		cmd := exec.Command("bash", "-c", "./nyan < testdata/dummyfile")
 		var o bytes.Buffer
 		cmd.Stdout = &o
@@ -143,7 +143,7 @@ func TestShell(t *testing.T) {
 		assert.Contains(t, o.String(), "This is dummy.")
 	})
 
-	t.Run("< input over echo+pipe", func(t *testing.T) {
+	t.Run("direct input over echo+pipe", func(t *testing.T) {
 		cmd := exec.Command("bash", "-c", "echo pipetest | ./nyan testdata/dummyfile")
 		var o bytes.Buffer
 		cmd.Stdout = &o
@@ -151,6 +151,18 @@ func TestShell(t *testing.T) {
 		assert.Nil(t, err)
 		assert.NotNil(t, o.String())
 		assert.NotContains(t, o.String(), "pipetest")
+		assert.Contains(t, o.String(), "This is dummy.")
+	})
+
+	t.Run("echo+pipe & < StdInput", func(t *testing.T) {
+		cmd := exec.Command("bash", "-c", "echo pipetest | ./nyan < testdata/dummyfile")
+		var o bytes.Buffer
+		cmd.Stdout = &o
+		err := cmd.Run()
+		assert.Nil(t, err)
+		assert.NotNil(t, o.String())
+		// Output should contain "pipetest"
+		// assert.Contains(t, o.String(), "pipetest")
 		assert.Contains(t, o.String(), "This is dummy.")
 	})
 }
