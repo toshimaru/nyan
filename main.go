@@ -7,6 +7,7 @@ import (
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/formatters"
 	"github.com/alecthomas/chroma/lexers"
+	"github.com/mattn/go-isatty"
 	"github.com/spf13/cobra"
 	"github.com/toshimaru/nyan/styles"
 )
@@ -60,6 +61,10 @@ func cmdMain(cmd *cobra.Command, args []string) error {
 			return err
 		}
 		lexer = lexers.Match(filename)
+	}
+	if !isatty.IsTerminal(os.Stdout.Fd()) {
+		cmd.Print(string(data))
+		return nil
 	}
 
 	if lexer == nil {
