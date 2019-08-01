@@ -41,6 +41,7 @@ func TestInvalidFilename(t *testing.T) {
 
 func TestExecute(t *testing.T) {
 	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go"})
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
@@ -52,6 +53,7 @@ func TestExecute(t *testing.T) {
 
 func TestInvalidTheme(t *testing.T) {
 	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "-t", "invalid"})
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
@@ -63,6 +65,7 @@ func TestInvalidTheme(t *testing.T) {
 
 func TestValidTheme(t *testing.T) {
 	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "-t", "vim"})
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
@@ -99,6 +102,7 @@ func TestUnknownFile(t *testing.T) {
 func TestFromStdIn(t *testing.T) {
 	i := bytes.NewBufferString("package main")
 	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{})
 	rootCmd.SetIn(i)
 	rootCmd.SetOut(o)
@@ -161,8 +165,6 @@ func TestShell(t *testing.T) {
 		err := cmd.Run()
 		assert.Nil(t, err)
 		assert.NotNil(t, o.String())
-		// Output should contain "pipetest"
-		// assert.Contains(t, o.String(), "pipetest")
 		assert.Contains(t, o.String(), "This is dummy.")
 	})
 }
