@@ -41,32 +41,31 @@ func main() {
 	}
 }
 
-func cmdMain(cmd *cobra.Command, args []string) error {
+func cmdMain(cmd *cobra.Command, args []string) (err error) {
 	if showVersion {
 		cmd.Println("Version 0.0.0 (not yet released)")
-		return nil
+		return
 	}
 
 	var data []byte
-	var err error
 	var lexer chroma.Lexer
 
 	if len(args) < 1 || args[0] == "-" {
 		in := cmd.InOrStdin()
 		if data, err = ioutil.ReadAll(in); err != nil {
-			return err
+			return
 		}
 		lexer = lexers.Analyse(string(data))
 	} else {
 		filename := args[0]
 		if data, err = ioutil.ReadFile(filename); err != nil {
-			return err
+			return
 		}
 		lexer = lexers.Match(filename)
 	}
 	if !isTerminalFunc(os.Stdout.Fd()) {
 		cmd.Print(string(data))
-		return nil
+		return
 	}
 
 	if lexer == nil {
@@ -75,5 +74,5 @@ func cmdMain(cmd *cobra.Command, args []string) error {
 	iterator, _ := lexer.Tokenise(nil, string(data))
 	formatter := formatters.Get("terminal256")
 	formatter.Format(cmd.OutOrStdout(), styles.Get(theme), iterator)
-	return nil
+	return
 }
