@@ -25,6 +25,8 @@ var rootCmd = &cobra.Command{
 	RunE:    cmdMain,
 }
 
+var isTerminalFunc = isatty.IsTerminal
+
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&showVersion, "version", "v", false, `show version`)
 	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", "color theme")
@@ -62,7 +64,7 @@ func cmdMain(cmd *cobra.Command, args []string) error {
 		}
 		lexer = lexers.Match(filename)
 	}
-	if !isatty.IsTerminal(os.Stdout.Fd()) {
+	if !isTerminalFunc(os.Stdout.Fd()) {
 		cmd.Print(string(data))
 		return nil
 	}
