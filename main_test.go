@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"io/ioutil"
 	"os/exec"
 	"testing"
 
@@ -134,7 +135,7 @@ func TestShell(t *testing.T) {
 		err := cmd.Run()
 		assert.Nil(t, err)
 		assert.NotNil(t, o.String())
-		assert.Contains(t, o.String(), "pipetest")
+		assert.Equal(t, "pipetest\n", o.String())
 	})
 
 	t.Run("< StdInput", func(t *testing.T) {
@@ -144,7 +145,7 @@ func TestShell(t *testing.T) {
 		err := cmd.Run()
 		assert.Nil(t, err)
 		assert.NotNil(t, o.String())
-		assert.Contains(t, o.String(), "This is dummy.")
+		assert.Equal(t, "This is dummy.", o.String())
 	})
 
 	t.Run("direct input over echo+pipe", func(t *testing.T) {
@@ -155,7 +156,7 @@ func TestShell(t *testing.T) {
 		assert.Nil(t, err)
 		assert.NotNil(t, o.String())
 		assert.NotContains(t, o.String(), "pipetest")
-		assert.Contains(t, o.String(), "This is dummy.")
+		assert.Equal(t, "This is dummy.", o.String())
 	})
 
 	t.Run("echo+pipe & < StdInput", func(t *testing.T) {
@@ -165,7 +166,15 @@ func TestShell(t *testing.T) {
 		err := cmd.Run()
 		assert.Nil(t, err)
 		assert.NotNil(t, o.String())
-		assert.Contains(t, o.String(), "This is dummy.")
+		assert.Equal(t, "This is dummy.", o.String())
+	})
+
+	t.Run("`> file` out is not highlighted", func(t *testing.T) {
+		cmd := exec.Command("bash", "-c", "echo 'package main' | ./nyan > testdata/output.txt")
+		err := cmd.Run()
+		data, err := ioutil.ReadFile("testdata/output.txt")
+		assert.Nil(t, err)
+		assert.Equal(t, "package main\n", string(data))
 	})
 }
 

@@ -51,8 +51,7 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 	var lexer chroma.Lexer
 
 	if len(args) < 1 || args[0] == "-" {
-		in := cmd.InOrStdin()
-		if data, err = ioutil.ReadAll(in); err != nil {
+		if data, err = ioutil.ReadAll(cmd.InOrStdin()); err != nil {
 			return
 		}
 		lexer = lexers.Analyse(string(data))
