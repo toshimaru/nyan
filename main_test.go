@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"io/ioutil"
 	"os/exec"
 	"testing"
 
@@ -41,6 +42,7 @@ func TestInvalidFilename(t *testing.T) {
 
 func TestExecute(t *testing.T) {
 	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go"})
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
@@ -52,6 +54,7 @@ func TestExecute(t *testing.T) {
 
 func TestInvalidTheme(t *testing.T) {
 	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "-t", "invalid"})
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
@@ -63,6 +66,7 @@ func TestInvalidTheme(t *testing.T) {
 
 func TestValidTheme(t *testing.T) {
 	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "-t", "vim"})
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
@@ -99,6 +103,7 @@ func TestUnknownFile(t *testing.T) {
 func TestFromStdIn(t *testing.T) {
 	i := bytes.NewBufferString("package main")
 	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{})
 	rootCmd.SetIn(i)
 	rootCmd.SetOut(o)
@@ -130,20 +135,20 @@ func TestShell(t *testing.T) {
 		err := cmd.Run()
 		assert.Nil(t, err)
 		assert.NotNil(t, o.String())
-		assert.Contains(t, o.String(), "pipetest")
+		assert.Equal(t, "pipetest\n", o.String())
 	})
 
-	t.Run("< input", func(t *testing.T) {
+	t.Run("< StdInput", func(t *testing.T) {
 		cmd := exec.Command("bash", "-c", "./nyan < testdata/dummyfile")
 		var o bytes.Buffer
 		cmd.Stdout = &o
 		err := cmd.Run()
 		assert.Nil(t, err)
 		assert.NotNil(t, o.String())
-		assert.Contains(t, o.String(), "This is dummy.")
+		assert.Equal(t, "This is dummy.", o.String())
 	})
 
-	t.Run("< input over echo+pipe", func(t *testing.T) {
+	t.Run("direct input over echo+pipe", func(t *testing.T) {
 		cmd := exec.Command("bash", "-c", "echo pipetest | ./nyan testdata/dummyfile")
 		var o bytes.Buffer
 		cmd.Stdout = &o
@@ -151,7 +156,25 @@ func TestShell(t *testing.T) {
 		assert.Nil(t, err)
 		assert.NotNil(t, o.String())
 		assert.NotContains(t, o.String(), "pipetest")
-		assert.Contains(t, o.String(), "This is dummy.")
+		assert.Equal(t, "This is dummy.", o.String())
+	})
+
+	t.Run("echo+pipe & < StdInput", func(t *testing.T) {
+		cmd := exec.Command("bash", "-c", "echo pipetest | ./nyan < testdata/dummyfile")
+		var o bytes.Buffer
+		cmd.Stdout = &o
+		err := cmd.Run()
+		assert.Nil(t, err)
+		assert.NotNil(t, o.String())
+		assert.Equal(t, "This is dummy.", o.String())
+	})
+
+	t.Run("`> file` out is not highlighted", func(t *testing.T) {
+		cmd := exec.Command("bash", "-c", "echo 'package main' | ./nyan > testdata/output.txt")
+		err := cmd.Run()
+		data, err := ioutil.ReadFile("testdata/output.txt")
+		assert.Nil(t, err)
+		assert.Equal(t, "package main\n", string(data))
 	})
 }
 
