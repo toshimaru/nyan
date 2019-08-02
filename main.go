@@ -63,16 +63,16 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 		}
 		lexer = lexers.Match(filename)
 	}
-	if !isTerminalFunc(os.Stdout.Fd()) {
-		cmd.Print(string(data))
-		return
-	}
 
-	if lexer == nil {
-		lexer = lexers.Fallback
+	if isTerminalFunc(os.Stdout.Fd()) {
+		if lexer == nil {
+			lexer = lexers.Fallback
+		}
+		iterator, _ := lexer.Tokenise(nil, string(data))
+		formatter := formatters.Get("terminal256")
+		formatter.Format(cmd.OutOrStdout(), styles.Get(theme), iterator)
+	} else {
+		cmd.Print(string(data))
 	}
-	iterator, _ := lexer.Tokenise(nil, string(data))
-	formatter := formatters.Get("terminal256")
-	formatter.Format(cmd.OutOrStdout(), styles.Get(theme), iterator)
 	return
 }
