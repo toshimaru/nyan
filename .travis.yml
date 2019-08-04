@@ -1,6 +1,9 @@
 language: go
 go:
   - "1.12.x"
+cache:
+  directories:
+    - $GOPATH/pkg/mod
 env:
   global:
     - GO111MODULE=on
