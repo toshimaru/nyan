@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 
@@ -29,7 +30,8 @@ var isTerminalFunc = isatty.IsTerminal
 
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&showVersion, "version", "v", false, `show version`)
-	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", "color theme")
+	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", fmt.Sprintf(`color theme
+available themes: %s`, styles.Names()))
 }
 
 func main() {
