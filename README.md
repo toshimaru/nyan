@@ -12,6 +12,12 @@ Colorized cat command.
 $ go get github.com/toshimaru/nyan
 ```
 
+## Usage
+
+```
+$ nyan FILE
+```
+
 ## What is nyan?
 
 `nyan` originated from [nyan-cat](http://www.nyan.cat/).
