@@ -73,7 +73,7 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 
 func printData(data *[]byte, cmd *cobra.Command, lexer *chroma.Lexer) {
 	if isTerminalFunc(os.Stdout.Fd()) {
-		if lexer == nil {
+		if *lexer == nil {
 			*lexer = lexers.Fallback
 		}
 		iterator, _ := (*lexer).Tokenise(nil, string(*data))
