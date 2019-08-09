@@ -57,23 +57,29 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 			return
 		}
 		lexer = lexers.Analyse(string(data))
+		printData(&data, cmd, lexer)
 	} else {
-		filename := args[0]
-		if data, err = ioutil.ReadFile(filename); err != nil {
-			return
+		for _, filename := range args {
+			if data, err = ioutil.ReadFile(filename); err != nil {
+				return
+			}
+			lexer = lexers.Match(filename)
+			printData(&data, cmd, lexer)
 		}
-		lexer = lexers.Match(filename)
 	}
 
+	return
+}
+
+func printData(data *[]byte, cmd *cobra.Command, lexer chroma.Lexer) {
 	if isTerminalFunc(os.Stdout.Fd()) {
 		if lexer == nil {
 			lexer = lexers.Fallback
 		}
-		iterator, _ := lexer.Tokenise(nil, string(data))
+		iterator, _ := lexer.Tokenise(nil, string(*data))
 		formatter := formatters.Get("terminal256")
 		formatter.Format(cmd.OutOrStdout(), styles.Get(theme), iterator)
 	} else {
-		cmd.Print(string(data))
+		cmd.Print(string(*data))
 	}
-	return
 }
