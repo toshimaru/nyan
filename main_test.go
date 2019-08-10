@@ -52,6 +52,32 @@ func TestExecute(t *testing.T) {
 	assert.Contains(t, o.String(), "[38;5;197mpackage[0m[38;5;231m")
 }
 
+func TestMultipleFiles(t *testing.T) {
+	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
+	rootCmd.SetArgs([]string{"testdata/dummy.go", "testdata/dummyfile"})
+	rootCmd.SetOut(o)
+	err := rootCmd.Execute()
+
+	assert.Nil(t, err)
+	assert.NotNil(t, o.String())
+	assert.Contains(t, o.String(), "[38;5;197mpackage[0m[38;5;231m")
+	assert.Contains(t, o.String(), "[0m[38;5;231mThis is dummy.[0m")
+}
+
+func TestMultipleFilesWithInvalidFileError(t *testing.T) {
+	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
+	rootCmd.SetArgs([]string{"testdata/dummy.go", "InvalidFilename", "testdata/dummyfile"})
+	rootCmd.SetOut(o)
+	err := rootCmd.Execute()
+
+	assert.Nil(t, err)
+	assert.NotNil(t, o.String())
+	assert.Contains(t, o.String(), "[38;5;197mpackage[0m[38;5;231m")
+	assert.Contains(t, o.String(), "open InvalidFilename: no such file or directory")
+	assert.Contains(t, o.String(), "[38;5;231mThis is dummy.[0m")
+}
 func TestInvalidTheme(t *testing.T) {
 	o := bytes.NewBufferString("")
 	isTerminalFunc = func(fd uintptr) bool { return true }
