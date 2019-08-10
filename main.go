@@ -61,7 +61,7 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 	} else {
 		for _, filename := range args {
 			if data, err = ioutil.ReadFile(filename); err != nil {
-				return
+				cmd.Println(err)
 			}
 			lexer = lexers.Match(filename)
 			printData(&data, cmd, lexer)
