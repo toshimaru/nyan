@@ -196,9 +196,10 @@ func TestShell(t *testing.T) {
 	})
 
 	t.Run("`> file` out is not highlighted", func(t *testing.T) {
-		cmd := exec.Command("bash", "-c", "echo 'package main' | ./nyan > testdata/output.txt")
+		outfile := "testdata/output.out"
+		cmd := exec.Command("bash", "-c", "echo 'package main' | ./nyan > "+outfile)
 		err := cmd.Run()
-		data, err := ioutil.ReadFile("testdata/output.txt")
+		data, err := ioutil.ReadFile(outfile)
 		assert.Nil(t, err)
 		assert.Equal(t, "package main\n", string(data))
 	})
