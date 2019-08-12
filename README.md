@@ -4,7 +4,7 @@
 
 # nyan
 
-Colorized cat command.
+Colored `cat` command which supports syntax highlighting.
 
 ## Installation
 
