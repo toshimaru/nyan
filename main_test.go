@@ -9,6 +9,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestMain(t *testing.T) {
+	rootCmd.SetArgs([]string{"--help"})
+	main()
+}
+
 func TestCommandExecute(t *testing.T) {
 	err := rootCmd.Execute()
 
