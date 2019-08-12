@@ -29,7 +29,6 @@ func TestHelpCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Contains(t, o.String(), rootCmd.Use)
-	assert.Contains(t, o.String(), rootCmd.Short)
 	assert.Contains(t, o.String(), rootCmd.Long)
 	assert.Contains(t, o.String(), rootCmd.Example)
 }
