@@ -19,11 +19,13 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:     "nyan [FILE]",
-	Short:   "Colorized cat",
-	Long:    "Colorized cat",
-	Example: `$ nyan FILE`,
-	RunE:    cmdMain,
+	Use:   "nyan [OPTION]... [FILE]...",
+	Short: "Colored cat command.",
+	Long:  "Colored cat command which supports syntax highlighting.",
+	Example: `$ nyan FILE
+$ nyan FILE1 FILE2
+$ nyan -t solarized-dark FILE1`,
+	RunE: cmdMain,
 }
 
 var isTerminalFunc = isatty.IsTerminal

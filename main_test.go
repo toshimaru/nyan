@@ -9,6 +9,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestMain(t *testing.T) {
+	rootCmd.SetArgs([]string{"--help"})
+	main()
+}
+
 func TestCommandExecute(t *testing.T) {
 	err := rootCmd.Execute()
 
@@ -24,7 +29,6 @@ func TestHelpCommand(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Contains(t, o.String(), rootCmd.Use)
-	assert.Contains(t, o.String(), rootCmd.Short)
 	assert.Contains(t, o.String(), rootCmd.Long)
 	assert.Contains(t, o.String(), rootCmd.Example)
 }
