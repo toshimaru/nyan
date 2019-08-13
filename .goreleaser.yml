@@ -1,5 +1,5 @@
-# This is an example goreleaser.yaml file with some sane defaults.
-# Make sure to check the documentation at http://goreleaser.com
+env:
+  - GO111MODULE=on
 before:
   hooks:
     - go mod download
@@ -29,4 +29,7 @@ brews:
 - github:
     owner: toshimaru
     name: homebrew-nyan
+  description: Colored cat command which supports syntax highlighting. 
   homepage: https://github.com/toshimaru/nyan
+  test: |
+    system "#{bin}/nyan -v"
