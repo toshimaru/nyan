@@ -116,7 +116,7 @@ func TestVersionFlag(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), "Version 0.0.0")
+	assert.Contains(t, o.String(), "version ")
 }
 
 func TestUnknownFile(t *testing.T) {

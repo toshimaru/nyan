@@ -14,6 +14,7 @@ import (
 )
 
 var (
+	version     = "dev"
 	showVersion bool
 	theme       string
 )
@@ -47,7 +48,7 @@ func main() {
 
 func cmdMain(cmd *cobra.Command, args []string) (err error) {
 	if showVersion {
-		cmd.Println("Version 0.0.0 (not yet released)")
+		cmd.Println("version", version)
 		return
 	}
 
