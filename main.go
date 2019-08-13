@@ -48,7 +48,7 @@ func main() {
 
 func cmdMain(cmd *cobra.Command, args []string) (err error) {
 	if showVersion {
-		cmd.Printf("version %s\n", version)
+		cmd.Println("version", version)
 		return
 	}
 
