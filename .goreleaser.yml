@@ -2,15 +2,14 @@
 # Make sure to check the documentation at http://goreleaser.com
 before:
   hooks:
-    # you may remove this if you don't use vgo
     - go mod download
-    # you may remove this if you don't need go generate
     # - go generate ./...
 builds:
 - env:
   - CGO_ENABLED=0
 archives:
-- replacements:
+- name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}'
+  replacements:
     darwin: Darwin
     linux: Linux
     windows: Windows
@@ -26,3 +25,8 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+brew:
+  github:
+    owner: toshimaru
+    name: homebrew-nyan
+  homepage: https://github.com/toshimaru/nyan
