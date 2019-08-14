@@ -7,6 +7,8 @@
 
 Colored `cat` command which supports syntax highlighting.
 
+![Screen Capture](https://user-images.githubusercontent.com/803398/63024853-00b18b80-bee3-11e9-853a-eea7e790a575.png)
+
 ## Installation
 
 ```console
