@@ -11,6 +11,14 @@ Colored `cat` command which supports syntax highlighting.
 
 ## Installation
 
+### Homebrew
+
+```console
+$ brew install toshimaru/nyan/nyan
+```
+
+### go get
+
 ```console
 $ go get github.com/toshimaru/nyan
 ```
@@ -23,6 +31,6 @@ $ nyan FILE
 
 ## What is nyan?
 
-`nyan` originated from [nyan-cat](http://www.nyan.cat/).
+`nyan` originates from [nyan-cat](http://www.nyan.cat/).
 
 ![nyancat](https://giphygifs.s3.amazonaws.com/media/sIIhZliB2McAo/giphy.gif)
