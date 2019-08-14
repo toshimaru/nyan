@@ -10,7 +10,7 @@ import (
 func TestNames(t *testing.T) {
 	names := Names()
 
-	assert.Equal(t, []string{"dracula", "monokai", "solarized-dark", "swapoff", "vim"}, names)
+	assert.Equal(t, []string{"abap", "dracula", "emacs", "monokai", "monokailight", "pygments", "solarized-dark", "solarized-light", "swapoff", "vim"}, names)
 }
 
 func TestGetValidStyle(t *testing.T) {
