@@ -12,6 +12,7 @@ import (
 func TestMain(t *testing.T) {
 	rootCmd.SetArgs([]string{"--help"})
 	main()
+	resetFlags()
 }
 
 func TestCommandExecute(t *testing.T) {
