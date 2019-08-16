@@ -8,6 +8,7 @@ import (
 	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/formatters"
 	"github.com/alecthomas/chroma/lexers"
+	"github.com/mattn/go-colorable"
 	"github.com/mattn/go-isatty"
 	"github.com/spf13/cobra"
 	"github.com/toshimaru/nyan/styles"
@@ -38,7 +39,7 @@ available themes: %s`, styles.Names()))
 }
 
 func main() {
-	rootCmd.SetOutput(os.Stdout)
+	rootCmd.SetOutput(colorable.NewColorableStdout())
 	if err := rootCmd.Execute(); err != nil {
 		rootCmd.SetOutput(os.Stderr)
 		rootCmd.Println(err)
