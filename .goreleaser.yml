@@ -6,7 +6,11 @@ before:
     # - go generate ./...
 builds:
 - env:
-  - CGO_ENABLED=0
+    - CGO_ENABLED=0
+  goos:
+    - linux
+    - darwin
+    - windows
 archives:
 - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}'
   replacements:
