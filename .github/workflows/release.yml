@@ -1,8 +1,5 @@
 name: Go
-on: 
-  push:
-    tags:
-      - v*
+on: [release]
 jobs:
   build:
     runs-on: macOS-latest
