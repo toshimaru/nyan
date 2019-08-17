@@ -14,12 +14,7 @@ jobs:
       id: go
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
-    - name: Get dependencies
-      run: go mod download
-      env:
-        GO111MODULE: on
     - name: Release via goreleaser
       run: goreleaser
       env:
-        GO111MODULE: on
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
