@@ -25,3 +25,6 @@ jobs:
         go test ./...
       env:
         GO111MODULE: on
+    # GitHub Actions doesn't support colored output, so comment it out temporarily.
+    # - name: Colored Output Test
+    #   run: go run main.go -- main.go
