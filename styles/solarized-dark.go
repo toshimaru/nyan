@@ -42,5 +42,5 @@ var SolarizedDark = Register(chroma.MustNewStyle("solarized-dark", chroma.StyleE
 	chroma.GenericStrong:         "bold",
 	chroma.GenericSubheading:     "#268BD2",
 	//chroma.Background:            "#93A1A1 bg:#002B36",
-	chroma.Other:                 "#CB4B16",
+	chroma.Other: "#CB4B16",
 }))
