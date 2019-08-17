@@ -2,9 +2,11 @@ name: Go
 on: [release]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: macOS-latest
     name: Build & Test
     steps:
+    - name: Install dependencies
+      run: brew install goreleaser
     - name: Set up Go 1.12
       uses: actions/setup-go@v1
       with:
@@ -16,9 +18,8 @@ jobs:
       run: go mod download
       env:
         GO111MODULE: on
-    - name: Build & Test
-      run: |
-        go build -v .
-        go test ./...
+    - name: Release via goreleaser
+      run: goreleaser
       env:
         GO111MODULE: on
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
