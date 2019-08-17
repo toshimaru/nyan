@@ -26,4 +26,4 @@ jobs:
       env:
         GO111MODULE: on
     - name: Colored Output Test
-      run: ./nyan main.go
+      run: nyan main.go
