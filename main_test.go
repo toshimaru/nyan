@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io/ioutil"
 	"os/exec"
+	"runtime"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -42,7 +43,7 @@ func TestInvalidFilename(t *testing.T) {
 
 	assert.NotNil(t, err)
 	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), "Error: open InvalidFilename: no such file or directory")
+	assert.Contains(t, o.String(), invalidFileErrorMsg())
 }
 
 func TestExecute(t *testing.T) {
@@ -80,7 +81,7 @@ func TestMultipleFilesWithInvalidFileError(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), "[38;5;197mpackage[0m[38;5;231m")
-	assert.Contains(t, o.String(), "open InvalidFilename: no such file or directory")
+	assert.Contains(t, o.String(), invalidFileErrorMsg())
 	assert.Contains(t, o.String(), "[38;5;231mThis is dummy.[0m")
 }
 func TestInvalidTheme(t *testing.T) {
@@ -217,4 +218,11 @@ func resetFlags() {
 
 func resetTheme() {
 	theme = "monokai"
+}
+
+func invalidFileErrorMsg() string {
+	if runtime.GOOS == "windows" {
+		return "open InvalidFilename: The system cannot find the file specified."
+	}
+	return "open InvalidFilename: no such file or directory"
 }
