@@ -1,8 +1,10 @@
 name: Release
-on: 
-  create:
+on:
+  push:
+    branches:
+      - "!*"
     tags:
-      - v*
+      - "v*"
 jobs:
   build:
     runs-on: macOS-latest
