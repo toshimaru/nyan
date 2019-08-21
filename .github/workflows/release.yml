@@ -1,5 +1,10 @@
-name: Go
-on: [release]
+name: Release
+on:
+  push:
+    branches:
+      - "!*"
+    tags:
+      - "v*.*.*"
 jobs:
   build:
     runs-on: macOS-latest
