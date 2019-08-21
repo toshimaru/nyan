@@ -3,7 +3,7 @@ on: [release]
 jobs:
   build:
     runs-on: macOS-latest
-    name: Build & Test
+    name: goreleaser
     steps:
     - name: Install dependencies
       run: brew install goreleaser
@@ -17,4 +17,4 @@ jobs:
     - name: Release via goreleaser
       run: goreleaser
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
