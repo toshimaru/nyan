@@ -1,12 +1,11 @@
 language: go
 go:
-  - "1.12.x"
+  - "1.13.x"
 cache:
   directories:
     - $GOPATH/pkg/mod
 env:
   global:
-    - GO111MODULE=on
     - CC_TEST_REPORTER_ID=f4c78effd3a10a5a45239e6886b35f42475467ad53f09a01002feeb04eb92d5b
 install:
   - go mod download
