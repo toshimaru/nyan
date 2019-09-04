@@ -13,23 +13,19 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Build & Test
     steps:
-    - name: Set up Go 1.12
+    - name: Set up Go 1.13
       uses: actions/setup-go@v1
       with:
-        go-version: 1.12
+        go-version: 1.13
       id: go
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
     - name: Get dependencies
       run: go mod download
-      env:
-        GO111MODULE: on
     - name: Build & Test
       run: |
         go build -v .
         go test ./...
-      env:
-        GO111MODULE: on
     # GitHub Actions doesn't support colored output, so comment it out temporarily.
     # - name: Colored Output Test
     #   run: go run main.go -- main.go
