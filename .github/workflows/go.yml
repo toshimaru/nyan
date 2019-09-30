@@ -2,7 +2,7 @@ name: Go Build & Test
 on: 
   push:
     branches:
-      - "*"
+      - "master"
     tags:
       - "!*"
   pull_request:
