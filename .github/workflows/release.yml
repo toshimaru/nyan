@@ -7,11 +7,9 @@ on:
       - "v*.*.*"
 jobs:
   build:
-    runs-on: macOS-latest
+    runs-on: ubuntu-latest
     name: goreleaser
     steps:
-    - name: Install dependencies
-      run: brew install goreleaser
     - name: Set up Go 1.13.x
       uses: actions/setup-go@v1
       with:
