@@ -7,19 +7,19 @@ on:
       - "v*.*.*"
 jobs:
   build:
-    runs-on: macOS-latest
+    runs-on: ubuntu-latest
     name: goreleaser
     steps:
-    - name: Install dependencies
-      run: brew install goreleaser
     - name: Set up Go 1.13.x
       uses: actions/setup-go@v1
       with:
-        go-version: 1.13.x
+        go-version: 1.13
       id: go
     - name: Check out code into the Go module directory
       uses: actions/checkout@v1
     - name: Release via goreleaser
-      run: goreleaser
+      uses: goreleaser/goreleaser-action@master
+      with:
+        args: release
       env:
         GITHUB_TOKEN: ${{ secrets.CUSTOM_GITHUB_TOKEN }}
