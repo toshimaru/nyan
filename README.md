@@ -31,6 +31,27 @@ $ go get github.com/toshimaru/nyan
 $ nyan FILE
 ```
 
+## Available Themes
+
+- abap
+- dracula
+- emacs
+- monokai (default)
+- monokailight
+- pygments
+- solarized-dark
+- solarized-light
+- swapoff
+- vim
+
+You can see available highlighting themes with the command:
+
+```
+$ nyan --list-themes
+```
+
+![Available Themes](https://user-images.githubusercontent.com/803398/67260792-42a91000-f4d8-11e9-9b92-19c0072987e3.png)
+
 ## What is nyan?
 
 `nyan` originates from [nyan-cat](http://www.nyan.cat/).
