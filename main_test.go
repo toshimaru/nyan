@@ -121,6 +121,18 @@ func TestVersionFlag(t *testing.T) {
 	assert.Contains(t, o.String(), "version ")
 }
 
+func TestListThemesFlag(t *testing.T) {
+	o := bytes.NewBufferString("")
+	rootCmd.SetArgs([]string{"--list-themes"})
+	rootCmd.SetOut(o)
+	err := rootCmd.Execute()
+	resetFlags()
+
+	assert.Nil(t, err)
+	assert.NotNil(t, o.String())
+	assert.Contains(t, o.String(), "Theme: ")
+}
+
 func TestUnknownFile(t *testing.T) {
 	o := bytes.NewBufferString("")
 	rootCmd.SetArgs([]string{"testdata/dummyfile"})
@@ -136,7 +148,7 @@ func TestFromStdIn(t *testing.T) {
 	i := bytes.NewBufferString("package main")
 	o := bytes.NewBufferString("")
 	isTerminalFunc = func(fd uintptr) bool { return true }
-	rootCmd.SetArgs([]string{})
+	rootCmd.SetArgs([]string{"-t", "monokai"})
 	rootCmd.SetIn(i)
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
@@ -213,6 +225,7 @@ func TestShell(t *testing.T) {
 
 func resetFlags() {
 	showVersion = false
+	listThemes = false
 	rootCmd.Flags().Set("help", "false")
 }
 

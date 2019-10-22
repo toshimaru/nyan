@@ -15,7 +15,10 @@ import (
 )
 
 var (
-	version     = "dev"
+	isTerminalFunc = isatty.IsTerminal
+	version        = "dev"
+
+	listThemes  bool
 	showVersion bool
 	theme       string
 )
@@ -30,12 +33,10 @@ $ nyan -t solarized-dark FILE1`,
 	RunE: cmdMain,
 }
 
-var isTerminalFunc = isatty.IsTerminal
-
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&showVersion, "version", "v", false, `show version`)
-	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", fmt.Sprintf(`color theme
-available themes: %s`, styles.Names()))
+	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", fmt.Sprintf("color theme\navailable themes: %s", styles.Names()))
+	rootCmd.PersistentFlags().BoolVarP(&listThemes, "list-themes", "T", false, `list available themes`)
 }
 
 func main() {
@@ -51,23 +52,25 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 	if showVersion {
 		cmd.Println("version", version)
 		return
+	} else if listThemes {
+		printThemes(cmd)
+		return
 	}
 
 	var data []byte
-	var lexer chroma.Lexer
 
 	if len(args) < 1 || args[0] == "-" {
 		if data, err = ioutil.ReadAll(cmd.InOrStdin()); err != nil {
 			return
 		}
-		lexer = lexers.Analyse(string(data))
+		lexer := lexers.Analyse(string(data))
 		printData(&data, cmd, lexer)
 	} else {
 		for _, filename := range args {
 			if data, err = ioutil.ReadFile(filename); err != nil {
 				cmd.Println(err)
 			}
-			lexer = lexers.Match(filename)
+			lexer := lexers.Match(filename)
 			printData(&data, cmd, lexer)
 		}
 	}
@@ -85,5 +88,24 @@ func printData(data *[]byte, cmd *cobra.Command, lexer chroma.Lexer) {
 		formatter.Format(cmd.OutOrStdout(), styles.Get(theme), iterator)
 	} else {
 		cmd.Print(string(*data))
+	}
+}
+
+const sampleCode = `package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello nyan cat command 😺")
+}
+`
+
+func printThemes(cmd *cobra.Command) {
+	for _, theme = range styles.Names() {
+		cmd.Println("Theme: ", theme)
+		code := []byte(sampleCode)
+		lexer := lexers.Get("go")
+		printData(&code, cmd, lexer)
+		cmd.Println()
 	}
 }
