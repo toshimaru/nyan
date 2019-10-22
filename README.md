@@ -44,7 +44,7 @@ $ nyan FILE
 - swapoff
 - vim
 
-You can see available highlighting themes with the command:
+You can see available color themes with the command:
 
 ```
 $ nyan --list-themes
