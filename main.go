@@ -18,6 +18,7 @@ var (
 	version     = "dev"
 	showVersion bool
 	theme       string
+	listThemes  bool
 )
 
 var rootCmd = &cobra.Command{
@@ -34,8 +35,8 @@ var isTerminalFunc = isatty.IsTerminal
 
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&showVersion, "version", "v", false, `show version`)
-	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", fmt.Sprintf(`color theme
-available themes: %s`, styles.Names()))
+	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", fmt.Sprintf("color theme\navailable themes: %s", styles.Names()))
+	rootCmd.PersistentFlags().BoolVarP(&listThemes, "list-themes", "T", false, `list available themes`)
 }
 
 func main() {
