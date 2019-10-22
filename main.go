@@ -52,6 +52,9 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 	if showVersion {
 		cmd.Println("version", version)
 		return
+	} else if listThemes {
+		printThemes(cmd)
+		return
 	}
 
 	var data []byte
@@ -85,5 +88,11 @@ func printData(data *[]byte, cmd *cobra.Command, lexer chroma.Lexer) {
 		formatter.Format(cmd.OutOrStdout(), styles.Get(theme), iterator)
 	} else {
 		cmd.Print(string(*data))
+	}
+}
+
+func printThemes(cmd *cobra.Command) {
+	for _, theme = range styles.Names() {
+		cmd.Println(theme)
 	}
 }
