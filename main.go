@@ -15,10 +15,12 @@ import (
 )
 
 var (
-	version     = "dev"
+	isTerminalFunc = isatty.IsTerminal
+	version        = "dev"
+
+	listThemes  bool
 	showVersion bool
 	theme       string
-	listThemes  bool
 )
 
 var rootCmd = &cobra.Command{
@@ -30,8 +32,6 @@ $ nyan FILE1 FILE2
 $ nyan -t solarized-dark FILE1`,
 	RunE: cmdMain,
 }
-
-var isTerminalFunc = isatty.IsTerminal
 
 func init() {
 	rootCmd.PersistentFlags().BoolVarP(&showVersion, "version", "v", false, `show version`)
