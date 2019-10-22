@@ -28,15 +28,15 @@ var rootCmd = &cobra.Command{
 	Short: "Colored cat command.",
 	Long:  "Colored cat command which supports syntax highlighting.",
 	Example: `$ nyan FILE
-$ nyan FILE1 FILE2
-$ nyan -t solarized-dark FILE1`,
+$ nyan FILE1 FILE2 FILE3
+$ nyan -t solarized-dark FILE`,
 	RunE: cmdMain,
 }
 
 func init() {
-	rootCmd.PersistentFlags().BoolVarP(&showVersion, "version", "v", false, `show version`)
-	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", fmt.Sprintf("color theme\navailable themes: %s", styles.Names()))
-	rootCmd.PersistentFlags().BoolVarP(&listThemes, "list-themes", "T", false, `list available themes`)
+	rootCmd.PersistentFlags().BoolVarP(&showVersion, "version", "v", false, `Show version`)
+	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", fmt.Sprintf("Set color theme for syntax highlighting\nAvailable themes: %s", styles.Names()))
+	rootCmd.PersistentFlags().BoolVarP(&listThemes, "list-themes", "T", false, `List available color themes`)
 }
 
 func main() {
