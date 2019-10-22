@@ -91,8 +91,21 @@ func printData(data *[]byte, cmd *cobra.Command, lexer chroma.Lexer) {
 	}
 }
 
+const sampleCode = `package main
+
+import "fmt"
+
+func main() {
+	fmt.Println("Hello nyan cat command 😺")
+}
+`
+
 func printThemes(cmd *cobra.Command) {
 	for _, theme = range styles.Names() {
-		cmd.Println(theme)
+		cmd.Println("Theme: ", theme)
+		code := []byte(sampleCode)
+		lexer := lexers.Get("go")
+		printData(&code, cmd, lexer)
+		cmd.Println()
 	}
 }
