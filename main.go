@@ -21,6 +21,7 @@ var (
 	listThemes  bool
 	showVersion bool
 	theme       string
+	language    string
 )
 
 var rootCmd = &cobra.Command{
@@ -34,9 +35,10 @@ $ nyan -t solarized-dark FILE`,
 }
 
 func init() {
+	rootCmd.PersistentFlags().BoolVarP(&listThemes, "list-themes", "T", false, `List available color themes`)
 	rootCmd.PersistentFlags().BoolVarP(&showVersion, "version", "v", false, `Show version`)
 	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", fmt.Sprintf("Set color theme for syntax highlighting\nAvailable themes: %s", styles.Names()))
-	rootCmd.PersistentFlags().BoolVarP(&listThemes, "list-themes", "T", false, `List available color themes`)
+	rootCmd.PersistentFlags().StringVarP(&language, "language", "l", "", "Specify language for syntax highlighting")
 }
 
 func main() {
