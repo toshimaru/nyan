@@ -60,12 +60,13 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 	}
 
 	var data []byte
+	var lexer chroma.Lexer
 
 	if len(args) < 1 || args[0] == "-" {
 		if data, err = ioutil.ReadAll(cmd.InOrStdin()); err != nil {
 			return
 		}
-		lexer := lexers.Analyse(string(data))
+		lexer = lexers.Analyse(string(data))
 		printData(&data, cmd, lexer)
 	} else {
 		for _, filename := range args {
@@ -73,7 +74,7 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 				cmd.Println(err)
 				continue
 			}
-			lexer := lexers.Match(filename)
+			lexer = lexers.Match(filename)
 			printData(&data, cmd, lexer)
 		}
 	}
