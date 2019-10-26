@@ -66,7 +66,11 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 		if data, err = ioutil.ReadAll(cmd.InOrStdin()); err != nil {
 			return
 		}
-		lexer = lexers.Analyse(string(data))
+		if language != "" {
+			lexer = lexers.Get(language)
+		} else {
+			lexer = lexers.Analyse(string(data))
+		}
 		printData(&data, cmd, lexer)
 	} else {
 		for _, filename := range args {
@@ -74,7 +78,11 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 				cmd.Println(err)
 				continue
 			}
-			lexer = lexers.Match(filename)
+			if language != "" {
+				lexer = lexers.Get(language)
+			} else {
+				lexer = lexers.Match(filename)
+			}
 			printData(&data, cmd, lexer)
 		}
 	}
