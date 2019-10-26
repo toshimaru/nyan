@@ -75,6 +75,18 @@ func TestExecuteWithAnalyseUnknownFile(t *testing.T) {
 	assert.Contains(t, o.String(), _unhighlightedGoCode())
 }
 
+func TestLanguageOption(t *testing.T) {
+	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
+	rootCmd.SetArgs([]string{"-l", "go", "testdata/dummy.go.unknown"})
+	rootCmd.SetOut(o)
+	err := rootCmd.Execute()
+
+	assert.Nil(t, err)
+	assert.NotNil(t, o.String())
+	assert.Contains(t, o.String(), highlightedGoCode)
+}
+
 func TestMultipleFiles(t *testing.T) {
 	o := bytes.NewBufferString("")
 	isTerminalFunc = func(fd uintptr) bool { return true }
