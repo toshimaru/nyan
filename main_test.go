@@ -72,7 +72,7 @@ func TestExecuteWithAnalyseUnknownFile(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), unhighlightedGoCode)
+	assert.Contains(t, o.String(), _unhighlightedGoCode())
 }
 
 func TestMultipleFiles(t *testing.T) {
@@ -255,4 +255,11 @@ func invalidFileErrorMsg() string {
 		return "open InvalidFilename: The system cannot find the file specified."
 	}
 	return "open InvalidFilename: no such file or directory"
+}
+
+func _unhighlightedGoCode() string {
+	if runtime.GOOS == "windows" {
+		return "package main"
+	}
+	return unhighlightedGoCode
 }
