@@ -103,7 +103,8 @@ func printData(data *[]byte, cmd *cobra.Command, lexer chroma.Lexer) {
 	}
 }
 
-const sampleCode = `package main
+const sampleCode = `// Sample Code in Go
+package main
 
 import "fmt"
 
@@ -114,7 +115,7 @@ func main() {
 
 func printThemes(cmd *cobra.Command) {
 	for _, theme = range styles.Names() {
-		cmd.Println("Theme: ", theme)
+		cmd.Println("Theme:", theme)
 		code := []byte(sampleCode)
 		lexer := lexers.Get("go")
 		printData(&code, cmd, lexer)
