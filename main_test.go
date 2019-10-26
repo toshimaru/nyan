@@ -11,8 +11,8 @@ import (
 )
 
 const (
-	highlightedGoCode   = "[38;5;197mpackage[0m[38;5;231m"
-	unhighlightedGoCode = "[38;5;231mpackage main[0m[38;5;231m"
+	highlightedGoCode   = "[38;5;197mpackage[0m[38;5;231m"
+	unhighlightedGoCode = "[38;5;231mpackage main[0m[38;5;231m"
 )
 
 func TestMain(t *testing.T) {
