@@ -10,6 +10,11 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+const (
+	highlightedGoCode   = "[38;5;197mpackage[0m[38;5;231m"
+	unhighlightedGoCode = "[38;5;231mpackage main[0m[38;5;231m"
+)
+
 func TestMain(t *testing.T) {
 	rootCmd.SetArgs([]string{"--help"})
 	main()
@@ -55,7 +60,45 @@ func TestExecute(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), "[38;5;197mpackage[0m[38;5;231m")
+	assert.Contains(t, o.String(), highlightedGoCode)
+}
+
+func TestExecuteWithAnalyseUnknownFile(t *testing.T) {
+	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
+	rootCmd.SetArgs([]string{"testdata/dummy.go.unknown"})
+	rootCmd.SetOut(o)
+	err := rootCmd.Execute()
+
+	assert.Nil(t, err)
+	assert.NotNil(t, o.String())
+	assert.Contains(t, o.String(), _unhighlightedGoCode())
+}
+
+func TestLanguageOption(t *testing.T) {
+	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
+	rootCmd.SetArgs([]string{"--language", "go", "testdata/dummy.go.unknown"})
+	rootCmd.SetOut(o)
+	err := rootCmd.Execute()
+	resetStrings()
+
+	assert.Nil(t, err)
+	assert.NotNil(t, o.String())
+	assert.Contains(t, o.String(), highlightedGoCode)
+}
+
+func TestInvlaidLanguageOption(t *testing.T) {
+	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
+	rootCmd.SetArgs([]string{"--language", "invalid_lang", "testdata/dummy.go"})
+	rootCmd.SetOut(o)
+	err := rootCmd.Execute()
+	resetStrings()
+
+	assert.Nil(t, err)
+	assert.NotNil(t, o.String())
+	assert.Contains(t, o.String(), _unhighlightedGoCode())
 }
 
 func TestMultipleFiles(t *testing.T) {
@@ -67,7 +110,7 @@ func TestMultipleFiles(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), "[38;5;197mpackage[0m[38;5;231m")
+	assert.Contains(t, o.String(), highlightedGoCode)
 	assert.Contains(t, o.String(), "[0m[38;5;231mThis is dummy.[0m")
 }
 
@@ -80,29 +123,30 @@ func TestMultipleFilesWithInvalidFileError(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), "[38;5;197mpackage[0m[38;5;231m")
+	assert.Contains(t, o.String(), highlightedGoCode)
 	assert.Contains(t, o.String(), invalidFileErrorMsg())
 	assert.Contains(t, o.String(), "[38;5;231mThis is dummy.[0m")
 }
 func TestInvalidTheme(t *testing.T) {
 	o := bytes.NewBufferString("")
 	isTerminalFunc = func(fd uintptr) bool { return true }
-	rootCmd.SetArgs([]string{"testdata/dummy.go", "-t", "invalid"})
+	rootCmd.SetArgs([]string{"testdata/dummy.go", "--theme", "invalid"})
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
+	resetStrings()
 
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), "[1m[38;5;231mpackage")
+	assert.Contains(t, o.String(), "[1m[38;5;231mpackage")
 }
 
 func TestValidTheme(t *testing.T) {
 	o := bytes.NewBufferString("")
 	isTerminalFunc = func(fd uintptr) bool { return true }
-	rootCmd.SetArgs([]string{"testdata/dummy.go", "-t", "vim"})
+	rootCmd.SetArgs([]string{"testdata/dummy.go", "--theme", "vim"})
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
-	resetTheme()
+	resetStrings()
 
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
@@ -148,14 +192,28 @@ func TestFromStdIn(t *testing.T) {
 	i := bytes.NewBufferString("package main")
 	o := bytes.NewBufferString("")
 	isTerminalFunc = func(fd uintptr) bool { return true }
-	rootCmd.SetArgs([]string{"-t", "monokai"})
+	rootCmd.SetArgs([]string{"--theme", "monokai"})
 	rootCmd.SetIn(i)
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), "[38;5;197mpackage[0m[38;5;231m")
+	assert.Contains(t, o.String(), highlightedGoCode)
+}
+
+func TestFromStdInWithLanguageOption(t *testing.T) {
+	i := bytes.NewBufferString("package main")
+	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
+	rootCmd.SetArgs([]string{"--theme", "monokai", "--language", "go"})
+	rootCmd.SetIn(i)
+	rootCmd.SetOut(o)
+	err := rootCmd.Execute()
+
+	assert.Nil(t, err)
+	assert.NotNil(t, o.String())
+	assert.Contains(t, o.String(), highlightedGoCode)
 }
 
 func TestFromStdInWithDash(t *testing.T) {
@@ -229,7 +287,8 @@ func resetFlags() {
 	rootCmd.Flags().Set("help", "false")
 }
 
-func resetTheme() {
+func resetStrings() {
+	language = ""
 	theme = "monokai"
 }
 
@@ -238,4 +297,11 @@ func invalidFileErrorMsg() string {
 		return "open InvalidFilename: The system cannot find the file specified."
 	}
 	return "open InvalidFilename: no such file or directory"
+}
+
+func _unhighlightedGoCode() string {
+	if runtime.GOOS == "windows" {
+		return "package main"
+	}
+	return unhighlightedGoCode
 }

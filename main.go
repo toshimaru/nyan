@@ -21,6 +21,7 @@ var (
 	listThemes  bool
 	showVersion bool
 	theme       string
+	language    string
 )
 
 var rootCmd = &cobra.Command{
@@ -34,9 +35,10 @@ $ nyan -t solarized-dark FILE`,
 }
 
 func init() {
+	rootCmd.PersistentFlags().BoolVarP(&listThemes, "list-themes", "T", false, `List available color themes`)
 	rootCmd.PersistentFlags().BoolVarP(&showVersion, "version", "v", false, `Show version`)
 	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", fmt.Sprintf("Set color theme for syntax highlighting\nAvailable themes: %s", styles.Names()))
-	rootCmd.PersistentFlags().BoolVarP(&listThemes, "list-themes", "T", false, `List available color themes`)
+	rootCmd.PersistentFlags().StringVarP(&language, "language", "l", "", "Specify language for syntax highlighting")
 }
 
 func main() {
@@ -58,19 +60,29 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 	}
 
 	var data []byte
+	var lexer chroma.Lexer
 
 	if len(args) < 1 || args[0] == "-" {
 		if data, err = ioutil.ReadAll(cmd.InOrStdin()); err != nil {
 			return
 		}
-		lexer := lexers.Analyse(string(data))
+		if language != "" {
+			lexer = lexers.Get(language)
+		} else {
+			lexer = lexers.Analyse(string(data))
+		}
 		printData(&data, cmd, lexer)
 	} else {
 		for _, filename := range args {
 			if data, err = ioutil.ReadFile(filename); err != nil {
 				cmd.Println(err)
+				continue
 			}
-			lexer := lexers.Match(filename)
+			if language != "" {
+				lexer = lexers.Get(language)
+			} else {
+				lexer = lexers.Match(filename)
+			}
 			printData(&data, cmd, lexer)
 		}
 	}
@@ -91,7 +103,8 @@ func printData(data *[]byte, cmd *cobra.Command, lexer chroma.Lexer) {
 	}
 }
 
-const sampleCode = `package main
+const sampleCode = `// Sample Code in Go
+package main
 
 import "fmt"
 
@@ -102,7 +115,7 @@ func main() {
 
 func printThemes(cmd *cobra.Command) {
 	for _, theme = range styles.Names() {
-		cmd.Println("Theme: ", theme)
+		cmd.Println("Theme:", theme)
 		code := []byte(sampleCode)
 		lexer := lexers.Get("go")
 		printData(&code, cmd, lexer)
