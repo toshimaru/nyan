@@ -202,6 +202,20 @@ func TestFromStdIn(t *testing.T) {
 	assert.Contains(t, o.String(), highlightedGoCode)
 }
 
+func TestFromStdInWithLanguageOption(t *testing.T) {
+	i := bytes.NewBufferString("package main")
+	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
+	rootCmd.SetArgs([]string{"--theme", "monokai", "--language", "go"})
+	rootCmd.SetIn(i)
+	rootCmd.SetOut(o)
+	err := rootCmd.Execute()
+
+	assert.Nil(t, err)
+	assert.NotNil(t, o.String())
+	assert.Contains(t, o.String(), highlightedGoCode)
+}
+
 func TestFromStdInWithDash(t *testing.T) {
 	i := bytes.NewBufferString("TestFromStdIn")
 	o := bytes.NewBufferString("")
