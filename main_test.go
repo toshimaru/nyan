@@ -78,13 +78,27 @@ func TestExecuteWithAnalyseUnknownFile(t *testing.T) {
 func TestLanguageOption(t *testing.T) {
 	o := bytes.NewBufferString("")
 	isTerminalFunc = func(fd uintptr) bool { return true }
-	rootCmd.SetArgs([]string{"-l", "go", "testdata/dummy.go.unknown"})
+	rootCmd.SetArgs([]string{"--language", "go", "testdata/dummy.go.unknown"})
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
+	resetStrings()
 
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
+}
+
+func TestInvlaidLanguageOption(t *testing.T) {
+	o := bytes.NewBufferString("")
+	isTerminalFunc = func(fd uintptr) bool { return true }
+	rootCmd.SetArgs([]string{"--language", "unkonwn_language", "testdata/dummy.go"})
+	rootCmd.SetOut(o)
+	err := rootCmd.Execute()
+	resetStrings()
+
+	assert.Nil(t, err)
+	assert.NotNil(t, o.String())
+	assert.Contains(t, o.String(), unhighlightedGoCode)
 }
 
 func TestMultipleFiles(t *testing.T) {
@@ -116,9 +130,10 @@ func TestMultipleFilesWithInvalidFileError(t *testing.T) {
 func TestInvalidTheme(t *testing.T) {
 	o := bytes.NewBufferString("")
 	isTerminalFunc = func(fd uintptr) bool { return true }
-	rootCmd.SetArgs([]string{"testdata/dummy.go", "-t", "invalid"})
+	rootCmd.SetArgs([]string{"testdata/dummy.go", "--theme", "invalid"})
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
+	resetStrings()
 
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
@@ -128,10 +143,10 @@ func TestInvalidTheme(t *testing.T) {
 func TestValidTheme(t *testing.T) {
 	o := bytes.NewBufferString("")
 	isTerminalFunc = func(fd uintptr) bool { return true }
-	rootCmd.SetArgs([]string{"testdata/dummy.go", "-t", "vim"})
+	rootCmd.SetArgs([]string{"testdata/dummy.go", "--theme", "vim"})
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
-	resetTheme()
+	resetStrings()
 
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
@@ -177,7 +192,7 @@ func TestFromStdIn(t *testing.T) {
 	i := bytes.NewBufferString("package main")
 	o := bytes.NewBufferString("")
 	isTerminalFunc = func(fd uintptr) bool { return true }
-	rootCmd.SetArgs([]string{"-t", "monokai"})
+	rootCmd.SetArgs([]string{"--theme", "monokai"})
 	rootCmd.SetIn(i)
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
@@ -258,7 +273,8 @@ func resetFlags() {
 	rootCmd.Flags().Set("help", "false")
 }
 
-func resetTheme() {
+func resetStrings() {
+	language = ""
 	theme = "monokai"
 }
 
