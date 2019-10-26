@@ -98,7 +98,7 @@ func TestInvlaidLanguageOption(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), unhighlightedGoCode)
+	assert.Contains(t, o.String(), _unhighlightedGoCode())
 }
 
 func TestMultipleFiles(t *testing.T) {
