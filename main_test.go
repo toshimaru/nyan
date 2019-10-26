@@ -91,7 +91,7 @@ func TestLanguageOption(t *testing.T) {
 func TestInvlaidLanguageOption(t *testing.T) {
 	o := bytes.NewBufferString("")
 	isTerminalFunc = func(fd uintptr) bool { return true }
-	rootCmd.SetArgs([]string{"--language", "unkonwn_language", "testdata/dummy.go"})
+	rootCmd.SetArgs([]string{"--language", "invalid_lang", "testdata/dummy.go"})
 	rootCmd.SetOut(o)
 	err := rootCmd.Execute()
 	resetStrings()
@@ -137,7 +137,7 @@ func TestInvalidTheme(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), "[1m[38;5;231mpackage")
+	assert.Contains(t, o.String(), "[1m[38;5;231mpackage")
 }
 
 func TestValidTheme(t *testing.T) {
