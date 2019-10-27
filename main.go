@@ -40,7 +40,8 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", fmt.Sprintf("Set color theme for syntax highlighting\nAvailable themes: %s", styles.Names()))
 	rootCmd.PersistentFlags().StringVarP(&language, "language", "l", "", "Specify language for syntax highlighting")
 
-	rootCmd.SetOutput(colorable.NewColorableStdout())
+	rootCmd.SetOut(colorable.NewColorableStdout())
+	rootCmd.SetErr(colorable.NewColorableStderr())
 }
 
 func main() {
