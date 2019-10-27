@@ -42,13 +42,16 @@ func TestHelpCommand(t *testing.T) {
 
 func TestInvalidFilename(t *testing.T) {
 	o := bytes.NewBufferString("")
+	e := bytes.NewBufferString("")
 	rootCmd.SetArgs([]string{"InvalidFilename"})
 	rootCmd.SetOut(o)
+	rootCmd.SetOut(e)
 	err := rootCmd.Execute()
 
 	assert.NotNil(t, err)
 	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), invalidFileErrorMsg())
+	assert.Contains(t, o.String(), "")
+	assert.Contains(t, e.String(), invalidFileErrorMsg())
 }
 
 func TestExecute(t *testing.T) {
