@@ -76,7 +76,7 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 	} else {
 		for _, filename := range args {
 			if data, err = ioutil.ReadFile(filename); err != nil {
-				cmd.Println(err)
+				cmd.PrintErrln(err)
 				continue
 			}
 			if language != "" {
