@@ -116,16 +116,18 @@ func TestMultipleFiles(t *testing.T) {
 
 func TestMultipleFilesWithInvalidFileError(t *testing.T) {
 	o := bytes.NewBufferString("")
+	e := bytes.NewBufferString("")
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "InvalidFilename", "testdata/dummyfile"})
 	rootCmd.SetOut(o)
+	rootCmd.SetErr(e)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
-	assert.Contains(t, o.String(), invalidFileErrorMsg())
 	assert.Contains(t, o.String(), "[38;5;231mThis is dummy.[0m")
+	assert.Contains(t, e.String(), invalidFileErrorMsg())
 }
 func TestInvalidTheme(t *testing.T) {
 	o := bytes.NewBufferString("")
