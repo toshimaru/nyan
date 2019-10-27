@@ -44,7 +44,7 @@ func init() {
 func main() {
 	rootCmd.SetOutput(colorable.NewColorableStdout())
 	if err := rootCmd.Execute(); err != nil {
-		rootCmd.SetOutput(os.Stderr)
+		rootCmd.SetOutput(colorable.NewColorableStderr())
 		rootCmd.Println(err)
 		os.Exit(1)
 	}
