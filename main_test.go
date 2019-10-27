@@ -175,6 +175,7 @@ func TestListThemesFlag(t *testing.T) {
 	assert.Nil(t, err)
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), "Theme: ")
+	assert.Contains(t, o.String(), "Sample Code in Go")
 }
 
 func TestUnknownFile(t *testing.T) {
