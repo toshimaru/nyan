@@ -28,13 +28,15 @@ func TestCommandExecute(t *testing.T) {
 }
 
 func TestHelpCommand(t *testing.T) {
-	var o bytes.Buffer
+	var o, e bytes.Buffer
 	rootCmd.SetArgs([]string{"--help"})
 	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 	resetFlags()
 
 	assert.Nil(t, err)
+	assert.Empty(t, e.String())
 	assert.Contains(t, o.String(), rootCmd.Use)
 	assert.Contains(t, o.String(), rootCmd.Long)
 	assert.Contains(t, o.String(), rootCmd.Example)
@@ -44,7 +46,7 @@ func TestInvalidFilename(t *testing.T) {
 	var o, e bytes.Buffer
 	rootCmd.SetArgs([]string{"InvalidFilename"})
 	rootCmd.SetOut(&o)
-	rootCmd.SetOut(&e)
+	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 
 	assert.NotNil(t, err)
@@ -54,63 +56,73 @@ func TestInvalidFilename(t *testing.T) {
 }
 
 func TestExecute(t *testing.T) {
-	var o bytes.Buffer
+	var o, e bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go"})
 	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
+	assert.Empty(t, e.String())
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
 }
 
 func TestExecuteWithAnalyseUnknownFile(t *testing.T) {
-	var o bytes.Buffer
+	var o, e bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go.unknown"})
 	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
+	assert.Empty(t, e.String())
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), _unhighlightedGoCode())
 }
 
 func TestLanguageOption(t *testing.T) {
-	var o bytes.Buffer
+	var o, e bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"--language", "go", "testdata/dummy.go.unknown"})
 	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 	resetStrings()
 
 	assert.Nil(t, err)
+	assert.Empty(t, e.String())
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
 }
 
 func TestInvlaidLanguageOption(t *testing.T) {
-	var o bytes.Buffer
+	var o, e bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"--language", "invalid_lang", "testdata/dummy.go"})
 	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 	resetStrings()
 
 	assert.Nil(t, err)
+	assert.Empty(t, e.String())
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), _unhighlightedGoCode())
 }
 
 func TestMultipleFiles(t *testing.T) {
-	var o bytes.Buffer
+	var o, e bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "testdata/dummyfile"})
 	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
+	assert.Empty(t, e.String())
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
 	assert.Contains(t, o.String(), "[0m[38;5;231mThis is dummy.[0m")
@@ -131,104 +143,120 @@ func TestMultipleFilesWithInvalidFileError(t *testing.T) {
 	assert.Contains(t, e.String(), invalidFileErrorMsg())
 }
 func TestInvalidTheme(t *testing.T) {
-	var o bytes.Buffer
+	var o, e bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "--theme", "invalid"})
 	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 	resetStrings()
 
 	assert.Nil(t, err)
+	assert.Empty(t, e.String())
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), "[1m[38;5;231mpackage")
 }
 
 func TestValidTheme(t *testing.T) {
-	var o bytes.Buffer
+	var o, e bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "--theme", "vim"})
 	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 	resetStrings()
 
 	assert.Nil(t, err)
+	assert.Empty(t, e.String())
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), "[38;5;164mpackage[0m")
 }
 
 func TestVersionFlag(t *testing.T) {
-	var o bytes.Buffer
+	var o, e bytes.Buffer
 	rootCmd.SetArgs([]string{"-v"})
 	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 	resetFlags()
 
 	assert.Nil(t, err)
+	assert.Empty(t, e.String())
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), "version ")
 }
 
 func TestListThemesFlag(t *testing.T) {
-	var o bytes.Buffer
+	var o, e bytes.Buffer
 	rootCmd.SetArgs([]string{"--list-themes"})
 	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 	resetFlags()
 
 	assert.Nil(t, err)
+	assert.Empty(t, e.String())
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), "Theme: ")
 	assert.Contains(t, o.String(), "Sample Code in Go")
 }
 
 func TestUnknownFile(t *testing.T) {
-	var o bytes.Buffer
+	var o, e bytes.Buffer
 	rootCmd.SetArgs([]string{"testdata/dummyfile"})
 	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
+	assert.Empty(t, e.String())
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), "This is dummy.")
 }
 
 func TestFromStdIn(t *testing.T) {
 	i := bytes.NewBufferString("package main")
-	var o bytes.Buffer
+	var o, e bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"--theme", "monokai"})
 	rootCmd.SetIn(i)
 	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
+	assert.Empty(t, e.String())
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
 }
 
 func TestFromStdInWithLanguageOption(t *testing.T) {
 	i := bytes.NewBufferString("package main")
-	var o bytes.Buffer
+	var o, e bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"--theme", "monokai", "--language", "go"})
 	rootCmd.SetIn(i)
 	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
+	assert.Empty(t, e.String())
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
 }
 
 func TestFromStdInWithDash(t *testing.T) {
 	i := bytes.NewBufferString("TestFromStdIn")
-	var o bytes.Buffer
+	var o, e bytes.Buffer
 	rootCmd.SetArgs([]string{"-"})
 	rootCmd.SetIn(i)
 	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
+	assert.Empty(t, e.String())
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), "TestFromStdIn")
 }
