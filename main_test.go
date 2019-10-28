@@ -236,8 +236,8 @@ func TestFromStdInWithDash(t *testing.T) {
 func TestShell(t *testing.T) {
 	t.Run("echo+pipe", func(t *testing.T) {
 		cmd := exec.Command("bash", "-c", "echo pipetest | ./nyan")
-		o := new(bytes.Buffer)
-		cmd.Stdout = o
+		var o bytes.Buffer
+		cmd.Stdout = &o
 		err := cmd.Run()
 		assert.Nil(t, err)
 		assert.NotNil(t, o.String())
