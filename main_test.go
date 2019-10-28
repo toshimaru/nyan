@@ -28,9 +28,9 @@ func TestCommandExecute(t *testing.T) {
 }
 
 func TestHelpCommand(t *testing.T) {
-	o := bytes.NewBufferString("")
+	var o bytes.Buffer
 	rootCmd.SetArgs([]string{"--help"})
-	rootCmd.SetOut(o)
+	rootCmd.SetOut(&o)
 	err := rootCmd.Execute()
 	resetFlags()
 
@@ -41,11 +41,10 @@ func TestHelpCommand(t *testing.T) {
 }
 
 func TestInvalidFilename(t *testing.T) {
-	o := bytes.NewBufferString("")
-	e := bytes.NewBufferString("")
+	var o, e bytes.Buffer
 	rootCmd.SetArgs([]string{"InvalidFilename"})
-	rootCmd.SetOut(o)
-	rootCmd.SetOut(e)
+	rootCmd.SetOut(&o)
+	rootCmd.SetOut(&e)
 	err := rootCmd.Execute()
 
 	assert.NotNil(t, err)
@@ -55,10 +54,10 @@ func TestInvalidFilename(t *testing.T) {
 }
 
 func TestExecute(t *testing.T) {
-	o := bytes.NewBufferString("")
+	var o bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go"})
-	rootCmd.SetOut(o)
+	rootCmd.SetOut(&o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -67,10 +66,10 @@ func TestExecute(t *testing.T) {
 }
 
 func TestExecuteWithAnalyseUnknownFile(t *testing.T) {
-	o := bytes.NewBufferString("")
+	var o bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go.unknown"})
-	rootCmd.SetOut(o)
+	rootCmd.SetOut(&o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -79,10 +78,10 @@ func TestExecuteWithAnalyseUnknownFile(t *testing.T) {
 }
 
 func TestLanguageOption(t *testing.T) {
-	o := bytes.NewBufferString("")
+	var o bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"--language", "go", "testdata/dummy.go.unknown"})
-	rootCmd.SetOut(o)
+	rootCmd.SetOut(&o)
 	err := rootCmd.Execute()
 	resetStrings()
 
@@ -92,10 +91,10 @@ func TestLanguageOption(t *testing.T) {
 }
 
 func TestInvlaidLanguageOption(t *testing.T) {
-	o := bytes.NewBufferString("")
+	var o bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"--language", "invalid_lang", "testdata/dummy.go"})
-	rootCmd.SetOut(o)
+	rootCmd.SetOut(&o)
 	err := rootCmd.Execute()
 	resetStrings()
 
@@ -105,10 +104,10 @@ func TestInvlaidLanguageOption(t *testing.T) {
 }
 
 func TestMultipleFiles(t *testing.T) {
-	o := bytes.NewBufferString("")
+	var o bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "testdata/dummyfile"})
-	rootCmd.SetOut(o)
+	rootCmd.SetOut(&o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -118,12 +117,11 @@ func TestMultipleFiles(t *testing.T) {
 }
 
 func TestMultipleFilesWithInvalidFileError(t *testing.T) {
-	o := bytes.NewBufferString("")
-	e := bytes.NewBufferString("")
+	var o, e bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "InvalidFilename", "testdata/dummyfile"})
-	rootCmd.SetOut(o)
-	rootCmd.SetErr(e)
+	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -133,10 +131,10 @@ func TestMultipleFilesWithInvalidFileError(t *testing.T) {
 	assert.Contains(t, e.String(), invalidFileErrorMsg())
 }
 func TestInvalidTheme(t *testing.T) {
-	o := bytes.NewBufferString("")
+	var o bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "--theme", "invalid"})
-	rootCmd.SetOut(o)
+	rootCmd.SetOut(&o)
 	err := rootCmd.Execute()
 	resetStrings()
 
@@ -146,10 +144,10 @@ func TestInvalidTheme(t *testing.T) {
 }
 
 func TestValidTheme(t *testing.T) {
-	o := bytes.NewBufferString("")
+	var o bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "--theme", "vim"})
-	rootCmd.SetOut(o)
+	rootCmd.SetOut(&o)
 	err := rootCmd.Execute()
 	resetStrings()
 
@@ -159,9 +157,9 @@ func TestValidTheme(t *testing.T) {
 }
 
 func TestVersionFlag(t *testing.T) {
-	o := bytes.NewBufferString("")
+	var o bytes.Buffer
 	rootCmd.SetArgs([]string{"-v"})
-	rootCmd.SetOut(o)
+	rootCmd.SetOut(&o)
 	err := rootCmd.Execute()
 	resetFlags()
 
@@ -171,9 +169,9 @@ func TestVersionFlag(t *testing.T) {
 }
 
 func TestListThemesFlag(t *testing.T) {
-	o := bytes.NewBufferString("")
+	var o bytes.Buffer
 	rootCmd.SetArgs([]string{"--list-themes"})
-	rootCmd.SetOut(o)
+	rootCmd.SetOut(&o)
 	err := rootCmd.Execute()
 	resetFlags()
 
@@ -184,9 +182,9 @@ func TestListThemesFlag(t *testing.T) {
 }
 
 func TestUnknownFile(t *testing.T) {
-	o := bytes.NewBufferString("")
+	var o bytes.Buffer
 	rootCmd.SetArgs([]string{"testdata/dummyfile"})
-	rootCmd.SetOut(o)
+	rootCmd.SetOut(&o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -196,11 +194,11 @@ func TestUnknownFile(t *testing.T) {
 
 func TestFromStdIn(t *testing.T) {
 	i := bytes.NewBufferString("package main")
-	o := bytes.NewBufferString("")
+	var o bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"--theme", "monokai"})
 	rootCmd.SetIn(i)
-	rootCmd.SetOut(o)
+	rootCmd.SetOut(&o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -210,11 +208,11 @@ func TestFromStdIn(t *testing.T) {
 
 func TestFromStdInWithLanguageOption(t *testing.T) {
 	i := bytes.NewBufferString("package main")
-	o := bytes.NewBufferString("")
+	var o bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"--theme", "monokai", "--language", "go"})
 	rootCmd.SetIn(i)
-	rootCmd.SetOut(o)
+	rootCmd.SetOut(&o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -224,10 +222,10 @@ func TestFromStdInWithLanguageOption(t *testing.T) {
 
 func TestFromStdInWithDash(t *testing.T) {
 	i := bytes.NewBufferString("TestFromStdIn")
-	o := bytes.NewBufferString("")
+	var o bytes.Buffer
 	rootCmd.SetArgs([]string{"-"})
 	rootCmd.SetIn(i)
-	rootCmd.SetOut(o)
+	rootCmd.SetOut(&o)
 	err := rootCmd.Execute()
 
 	assert.Nil(t, err)
@@ -238,8 +236,8 @@ func TestFromStdInWithDash(t *testing.T) {
 func TestShell(t *testing.T) {
 	t.Run("echo+pipe", func(t *testing.T) {
 		cmd := exec.Command("bash", "-c", "echo pipetest | ./nyan")
-		var o bytes.Buffer
-		cmd.Stdout = &o
+		o := new(bytes.Buffer)
+		cmd.Stdout = o
 		err := cmd.Run()
 		assert.Nil(t, err)
 		assert.NotNil(t, o.String())
