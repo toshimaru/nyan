@@ -39,13 +39,15 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&showVersion, "version", "v", false, `Show version`)
 	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", fmt.Sprintf("Set color theme for syntax highlighting\nAvailable themes: %s", styles.Names()))
 	rootCmd.PersistentFlags().StringVarP(&language, "language", "l", "", "Specify language for syntax highlighting")
+
+	rootCmd.SetOut(colorable.NewColorableStdout())
+	rootCmd.SetErr(colorable.NewColorableStderr())
 }
 
 func main() {
-	rootCmd.SetOutput(colorable.NewColorableStdout())
 	if err := rootCmd.Execute(); err != nil {
-		rootCmd.SetOutput(os.Stderr)
-		rootCmd.Println(err)
+		// FIXME: use PrintErrln after upstream is fixed
+		rootCmd.PrintErr(err, "\n")
 		os.Exit(1)
 	}
 }
@@ -75,7 +77,8 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 	} else {
 		for _, filename := range args {
 			if data, err = ioutil.ReadFile(filename); err != nil {
-				cmd.Println(err)
+				// FIXME: use PrintErrln after upstream is fixed
+				cmd.PrintErr(err, "\n")
 				continue
 			}
 			if language != "" {
