@@ -49,7 +49,7 @@ func TestInvalidFilename(t *testing.T) {
 	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 
-	assert.NotNil(t, err)
+	assert.Error(t, err)
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), "")
 	assert.Contains(t, e.String(), invalidFileErrorMsg())
@@ -136,7 +136,7 @@ func TestMultipleFilesWithInvalidFileError(t *testing.T) {
 	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 
-	assert.Nil(t, err)
+	assert.Error(t, err)
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
 	assert.Contains(t, o.String(), "[38;5;231mThis is dummy.[0m")
