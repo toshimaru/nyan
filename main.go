@@ -48,8 +48,6 @@ func init() {
 
 func main() {
 	if err := rootCmd.Execute(); err != nil {
-		// FIXME: use PrintErrln after upstream is fixed
-		rootCmd.PrintErr(err, "\n")
 		os.Exit(1)
 	}
 }
@@ -68,6 +66,7 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 
 	if len(args) < 1 || args[0] == "-" {
 		if data, err = ioutil.ReadAll(cmd.InOrStdin()); err != nil {
+			cmd.PrintErr(err, "\n")
 			return
 		}
 		if language != "" {
