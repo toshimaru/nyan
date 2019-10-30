@@ -31,7 +31,9 @@ var rootCmd = &cobra.Command{
 	Example: `$ nyan FILE
 $ nyan FILE1 FILE2 FILE3
 $ nyan -t solarized-dark FILE`,
-	RunE: cmdMain,
+	RunE:          cmdMain,
+	SilenceErrors: true,
+	SilenceUsage:  false,
 }
 
 func init() {
