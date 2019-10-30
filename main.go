@@ -77,10 +77,12 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 		}
 		printData(&data, cmd, lexer)
 	} else {
+		var lastErr error
 		for _, filename := range args {
 			if data, err = ioutil.ReadFile(filename); err != nil {
 				// FIXME: use PrintErrln after upstream is fixed
 				cmd.PrintErr(err, "\n")
+				lastErr = err
 				continue
 			}
 			if language != "" {
@@ -90,8 +92,11 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 			}
 			printData(&data, cmd, lexer)
 		}
+		if lastErr != nil {
+			cmd.SilenceUsage = true
+			return lastErr
+		}
 	}
-
 	return
 }
 
