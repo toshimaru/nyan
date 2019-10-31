@@ -49,9 +49,8 @@ func TestInvalidFilename(t *testing.T) {
 	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 
-	assert.NotNil(t, err)
-	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), "")
+	assert.Error(t, err)
+	assert.Empty(t, o.String())
 	assert.Contains(t, e.String(), invalidFileErrorMsg())
 }
 
@@ -136,7 +135,7 @@ func TestMultipleFilesWithInvalidFileError(t *testing.T) {
 	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
 
-	assert.Nil(t, err)
+	assert.Error(t, err)
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
 	assert.Contains(t, o.String(), "[38;5;231mThis is dummy.[0m")
@@ -326,9 +325,9 @@ func resetStrings() {
 
 func invalidFileErrorMsg() string {
 	if runtime.GOOS == "windows" {
-		return "open InvalidFilename: The system cannot find the file specified."
+		return "Error: open InvalidFilename: The system cannot find the file specified."
 	}
-	return "open InvalidFilename: no such file or directory"
+	return "Error: open InvalidFilename: no such file or directory"
 }
 
 func _unhighlightedGoCode() string {

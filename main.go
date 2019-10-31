@@ -31,7 +31,9 @@ var rootCmd = &cobra.Command{
 	Example: `$ nyan FILE
 $ nyan FILE1 FILE2 FILE3
 $ nyan -t solarized-dark FILE`,
-	RunE: cmdMain,
+	RunE:          cmdMain,
+	SilenceErrors: true,
+	SilenceUsage:  false,
 }
 
 func init() {
@@ -46,8 +48,6 @@ func init() {
 
 func main() {
 	if err := rootCmd.Execute(); err != nil {
-		// FIXME: use PrintErrln after upstream is fixed
-		rootCmd.PrintErr(err, "\n")
 		os.Exit(1)
 	}
 }
@@ -66,6 +66,7 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 
 	if len(args) < 1 || args[0] == "-" {
 		if data, err = ioutil.ReadAll(cmd.InOrStdin()); err != nil {
+			cmd.PrintErr("Error: ", err, "\n")
 			return
 		}
 		if language != "" {
@@ -75,10 +76,12 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 		}
 		printData(&data, cmd, lexer)
 	} else {
+		var lastErr error
 		for _, filename := range args {
 			if data, err = ioutil.ReadFile(filename); err != nil {
 				// FIXME: use PrintErrln after upstream is fixed
-				cmd.PrintErr(err, "\n")
+				cmd.PrintErr("Error: ", err, "\n")
+				lastErr = err
 				continue
 			}
 			if language != "" {
@@ -88,8 +91,11 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 			}
 			printData(&data, cmd, lexer)
 		}
+		if lastErr != nil {
+			cmd.SilenceUsage = true
+			return lastErr
+		}
 	}
-
 	return
 }
 
