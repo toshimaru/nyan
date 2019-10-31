@@ -50,8 +50,7 @@ func TestInvalidFilename(t *testing.T) {
 	err := rootCmd.Execute()
 
 	assert.Error(t, err)
-	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), "")
+	assert.Empty(t, o.String())
 	assert.Contains(t, e.String(), invalidFileErrorMsg())
 }
 
