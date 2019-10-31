@@ -325,9 +325,9 @@ func resetStrings() {
 
 func invalidFileErrorMsg() string {
 	if runtime.GOOS == "windows" {
-		return "open InvalidFilename: The system cannot find the file specified."
+		return "Error: open InvalidFilename: The system cannot find the file specified."
 	}
-	return "open InvalidFilename: no such file or directory"
+	return "Error: open InvalidFilename: no such file or directory"
 }
 
 func _unhighlightedGoCode() string {

@@ -66,7 +66,7 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 
 	if len(args) < 1 || args[0] == "-" {
 		if data, err = ioutil.ReadAll(cmd.InOrStdin()); err != nil {
-			cmd.PrintErr(err, "\n")
+			cmd.PrintErr("Error: ", err, "\n")
 			return
 		}
 		if language != "" {
@@ -80,7 +80,7 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 		for _, filename := range args {
 			if data, err = ioutil.ReadFile(filename); err != nil {
 				// FIXME: use PrintErrln after upstream is fixed
-				cmd.PrintErr(err, "\n")
+				cmd.PrintErr("Error: ", err, "\n")
 				lastErr = err
 				continue
 			}
