@@ -25,7 +25,7 @@ var (
 )
 
 var rootCmd = &cobra.Command{
-	Use:   "nyan [OPTION]... [FILE]...",
+	Use:   "nyan [flags] [FILE]...",
 	Short: "Colored cat command.",
 	Long:  "Colored cat command which supports syntax highlighting.",
 	Example: `$ nyan FILE
