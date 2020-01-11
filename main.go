@@ -112,14 +112,15 @@ func printData(data *[]byte, cmd *cobra.Command, lexer chroma.Lexer) {
 	}
 }
 
-const sampleCode = `// Sample Code in Go
-package main
+const sampleCode = `
+  // Sample Code in Go
+  package main
 
-import "fmt"
+  import "fmt"
 
-func main() {
-	fmt.Println("Hello nyan cat command 😺")
-}
+  func main() {
+  	fmt.Println("Hello nyan cat command 😺")
+  }
 `
 
 func printThemes(cmd *cobra.Command) {
