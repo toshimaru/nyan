@@ -16,9 +16,7 @@ jobs:
         go-version: 1.13
       id: go
     - name: Check out code into the Go module directory
-      uses: actions/checkout@v1
-    - name: Check GITHUB_REF environment variable value
-      run: echo $GITHUB_REF
+      uses: actions/checkout@v2
     - name: Release via goreleaser
       uses: goreleaser/goreleaser-action@master
       with:
