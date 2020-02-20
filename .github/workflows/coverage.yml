@@ -1,0 +1,26 @@
+name: Coverage with CodeClimate
+on:
+  push:
+    branches:
+      - '*'
+    tags-ignore:
+      - '*'
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: codeclimate-report
+    steps:
+    - name: Set up Go 1.13
+      uses: actions/setup-go@v1
+      with:
+        go-version: 1.13
+      id: go
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v2
+    - name: Get dependencies
+      run: go mod download
+    # - uses: paambaati/codeclimate-action@v2.4.0
+    #   env:
+    #     CC_TEST_REPORTER_ID: 
+    #   with:
+    #     coverageCommand: bundle exec rspec
