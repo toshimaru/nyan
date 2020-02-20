@@ -27,4 +27,4 @@ jobs:
         ./cc-test-reporter before-build
         go build .
         go test ./... -coverprofile c.out
-        ./cc-test-reporter after-build
+        ./cc-test-reporter after-build --exit-code $?
