@@ -19,7 +19,7 @@ jobs:
       uses: actions/checkout@v2
     - name: Get dependencies
       run: go mod download
-    - uses: CodeClimate Report
+    - name: CodeClimate Report
       run: |
         go build .
         go test ./... -coverprofile c.out
