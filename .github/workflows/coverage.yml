@@ -9,8 +9,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     name: codeclimate-report
-    env:
-      CC_TEST_REPORTER_ID: f4c78effd3a10a5a45239e6886b35f42475467ad53f09a01002feeb04eb92d5b
+    # env:
+    #   CC_TEST_REPORTER_ID: f4c78effd3a10a5a45239e6886b35f42475467ad53f09a01002feeb04eb92d5b
     steps:
     - uses: actions/setup-go@v2-beta
       with:
@@ -22,9 +22,9 @@ jobs:
         go mod download
         curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
         chmod +x ./cc-test-reporter
-    - name: CodeClimate Report
-      run: |
-        ./cc-test-reporter before-build
         go build .
-        go test ./... -coverprofile c.out
-        ./cc-test-reporter after-build --exit-code $?
+    - uses: paambaati/codeclimate-action@v2.4.0
+      env:
+        CC_TEST_REPORTER_ID: f4c78effd3a10a5a45239e6886b35f42475467ad53f09a01002feeb04eb92d5b
+      with:
+        coverageCommand: go test ./... -coverprofile c.out
