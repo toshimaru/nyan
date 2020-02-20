@@ -10,9 +10,11 @@ jobs:
     runs-on: ubuntu-latest
     name: codeclimate-report
     steps:
-    - uses: actions/setup-go@v2-beta
+    - name: Set up Go 1.13
+      uses: actions/setup-go@v1
       with:
-        go-version: '^1.13.8'
+        go-version: 1.13
+      id: go
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
     - name: Get dependencies
