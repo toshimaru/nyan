@@ -20,7 +20,11 @@ jobs:
     - name: Get dependencies
       run: |
         go mod download
-        go build .
+        curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+        chmod +x ./cc-test-reporter
     - name: CodeClimate Report
       run: |
+        ./cc-test-reporter before-build
+        go build .
         go test ./... -coverprofile c.out
+        ./cc-test-reporter after-build
