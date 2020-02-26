@@ -5,18 +5,14 @@ jobs:
     runs-on: ubuntu-latest
     name: codeclimate-report
     steps:
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v2
+    - uses: actions/checkout@v2
     - uses: actions/setup-go@v2-beta
       with:
         go-version: '^1.13.8'
-    - name: Get dependencies
-      run: |
-        go build .
-    - uses: paambaati/codeclimate-action@v2.5.0
+    - run: go mod download
+    - uses: paambaati/codeclimate-action@v2.5.3
       env:
         CC_TEST_REPORTER_ID: f4c78effd3a10a5a45239e6886b35f42475467ad53f09a01002feeb04eb92d5b
       with:
         coverageCommand: go test ./... -coverprofile c.out
-        debug: true
         prefix: github.com/toshimaru/nyan
