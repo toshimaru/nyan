@@ -1,5 +1,5 @@
 name: Go Build & Test
-on: 
+on:
   push:
     branches:
       - '*'
