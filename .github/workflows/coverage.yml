@@ -21,3 +21,4 @@ jobs:
       with:
         coverageCommand: go test ./... -coverprofile c.out
         prefix: nyan
+        debug: true
