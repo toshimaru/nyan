@@ -1,8 +1,8 @@
 name: Release with goreleaser
 on:
   push:
-    branches-ignore:
-      - '*'
+    branches:
+      - '!*'
     tags:
       - v*.*.*
 jobs:
