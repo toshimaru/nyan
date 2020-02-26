@@ -1,5 +1,4 @@
 [![Release](https://img.shields.io/github/release/toshimaru/nyan.svg)](https://github.com/toshimaru/nyan/releases/latest)
-[![Build Status](https://travis-ci.com/toshimaru/nyan.svg?branch=master)](https://travis-ci.com/toshimaru/nyan)
 [![Actions Status](https://github.com/toshimaru/nyan/workflows/Go/badge.svg)](https://github.com/toshimaru/nyan/actions)
 [![Actions Status](https://github.com/toshimaru/nyan/workflows/Release/badge.svg)](https://github.com/toshimaru/nyan/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/f5063da42c2e2b00e625/maintainability)](https://codeclimate.com/github/toshimaru/nyan/maintainability)
