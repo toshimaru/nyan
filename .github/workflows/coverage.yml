@@ -17,5 +17,5 @@ jobs:
       env:
         CC_TEST_REPORTER_ID: f4c78effd3a10a5a45239e6886b35f42475467ad53f09a01002feeb04eb92d5b
       with:
-        coverageCommand: go test ./... -coverprofile c.out
+        coverageCommand: bo build . && go test ./... -coverprofile c.out
         prefix: nyan
