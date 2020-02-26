@@ -9,7 +9,7 @@ jobs:
     - uses: actions/setup-go@v2-beta
       with:
         go-version: '^1.13.8'
-    - run: go mod download
+    - run: go mod download && go build
     - uses: paambaati/codeclimate-action@v2.5.3
       env:
         CC_TEST_REPORTER_ID: f4c78effd3a10a5a45239e6886b35f42475467ad53f09a01002feeb04eb92d5b
