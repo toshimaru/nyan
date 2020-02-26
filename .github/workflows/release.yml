@@ -1,8 +1,8 @@
 name: Release with goreleaser
 on:
   push:
-    branches-ignore:
-      - '*'
+    branches:
+      - '!*'
     tags:
       - v*.*.*
 jobs:
@@ -10,11 +10,9 @@ jobs:
     runs-on: ubuntu-latest
     name: goreleaser
     steps:
-    - name: Set up Go 1.13
-      uses: actions/setup-go@v1
+    - uses: actions/setup-go@v2-beta
       with:
-        go-version: 1.13
-      id: go
+        go-version: '^1.13.8'
     - name: Check out code into the Go module directory
       uses: actions/checkout@v2
     - name: Release via goreleaser
