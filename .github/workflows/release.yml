@@ -1,8 +1,6 @@
 name: Release with goreleaser
 on:
   push:
-    branches:
-      - '!*'
     tags:
       - v*.*.*
 jobs:
@@ -10,11 +8,10 @@ jobs:
     runs-on: ubuntu-latest
     name: goreleaser
     steps:
+    - uses: actions/checkout@v2
     - uses: actions/setup-go@v2-beta
       with:
         go-version: '^1.13.8'
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v2
     - name: Release via goreleaser
       uses: goreleaser/goreleaser-action@master
       with:
