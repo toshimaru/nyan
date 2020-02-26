@@ -18,6 +18,8 @@ jobs:
     - uses: paambaati/codeclimate-action@v2.5.0
       env:
         CC_TEST_REPORTER_ID: f4c78effd3a10a5a45239e6886b35f42475467ad53f09a01002feeb04eb92d5b
+        GIT_BRANCH: ${{ env.GITHUB_HEAD_REF }}
+        GIT_COMMIT_SHA: ${{ env.GITHUB_SHA }}
       with:
         coverageCommand: go test ./... -coverprofile c.out
         debug: true
