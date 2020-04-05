@@ -53,6 +53,7 @@ func init() {
 
 func main() {
 	var x int
+	var y string
 	if err := rootCmd.Execute(); err != nil {
 		x = 3
 		os.Exit(x)
