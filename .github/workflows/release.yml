@@ -9,6 +9,8 @@ jobs:
     name: goreleaser
     steps:
     - uses: actions/checkout@v2
+    - name: Unshallow Fetch
+      run: git fetch --prune --unshallow
     - uses: actions/setup-go@v2-beta
       with:
         go-version: '^1.14.0'
