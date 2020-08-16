@@ -4,9 +4,8 @@ on:
     tags:
       - v*.*.*
 jobs:
-  build:
+  goreleaser:
     runs-on: ubuntu-latest
-    name: goreleaser
     steps:
     - uses: actions/checkout@v2
     - name: Unshallow Fetch
