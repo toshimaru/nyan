@@ -1,14 +1,13 @@
 name: Coverage with CodeClimate
 on: [push]
 jobs:
-  build:
+  codeclimate-report:
     runs-on: ubuntu-latest
-    name: codeclimate-report
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-go@v2
       with:
-        go-version: '^1.14.0'
+        go-version: '^1.15.0'
     - run: go mod download && go build
     - uses: paambaati/codeclimate-action@v2.5.0
       env:

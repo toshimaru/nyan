@@ -9,6 +9,9 @@ builds:
     - linux
     - darwin
     - windows
+  ignore:
+    - goos: darwin
+      goarch: 386
 archives:
 - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}'
   replacements:
@@ -28,7 +31,7 @@ changelog:
     - '^docs:'
     - '^test:'
 brews:
-- github:
+- tap:
     owner: toshimaru
     name: homebrew-nyan
   description: Colored cat command which supports syntax highlighting. 
