@@ -28,7 +28,7 @@ changelog:
     - '^docs:'
     - '^test:'
 brews:
-- github:
+- tap:
     owner: toshimaru
     name: homebrew-nyan
   description: Colored cat command which supports syntax highlighting. 
