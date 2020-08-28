@@ -15,7 +15,7 @@ const (
 	unhighlightedGoCode = "[38;5;231mpackage main[0m[38;5;231m"
 )
 
-func TestMain(t *testing.T) {
+func TestMain(m *testing.M) {
 	rootCmd.SetArgs([]string{"--help"})
 	main()
 	resetFlags()
