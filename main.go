@@ -106,10 +106,12 @@ func printData(data *[]byte, cmd *cobra.Command, lexer chroma.Lexer) {
 
 	out := cmd.OutOrStdout()
 	if number {
-		out = &numberWriter{
+		w := &numberWriter{
 			w:           out,
 			currentLine: 1,
 		}
+		out = w
+		defer w.Flush()
 	}
 
 	if isTerminalFunc(os.Stdout.Fd()) {
@@ -184,4 +186,14 @@ func (w *numberWriter) Write(p []byte) (n int, err error) {
 		w.buf = append(w.buf, p...)
 	}
 	return len(original), nil
+}
+
+func (w *numberWriter) Flush() error {
+	format := "%6d\t%s"
+	if w.currentLine > 999999 {
+		format = "%d\t%s"
+	}
+	_, err := fmt.Fprintf(w.w, format, w.currentLine, string(w.buf))
+	w.buf = w.buf[:0]
+	return err
 }
