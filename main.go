@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 
@@ -22,6 +23,7 @@ var (
 	showVersion bool
 	theme       string
 	language    string
+	number      bool
 )
 
 var rootCmd = &cobra.Command{
@@ -42,6 +44,7 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&showVersion, "version", "v", false, `Show version`)
 	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", fmt.Sprintf("Set color theme for syntax highlighting\nAvailable themes: %s", styles.Names()))
 	rootCmd.PersistentFlags().StringVarP(&language, "language", "l", "", "Specify language for syntax highlighting")
+	rootCmd.PersistentFlags().BoolVarP(&number, "number", "n", false, "number all output lines")
 
 	rootCmd.SetOut(colorable.NewColorableStdout())
 	rootCmd.SetErr(colorable.NewColorableStderr())
@@ -100,15 +103,24 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 }
 
 func printData(data *[]byte, cmd *cobra.Command, lexer chroma.Lexer) {
+
+	out := cmd.OutOrStdout()
+	if number {
+		out = &numberWriter{
+			w:           out,
+			currentLine: 1,
+		}
+	}
+
 	if isTerminalFunc(os.Stdout.Fd()) {
 		if lexer == nil {
 			lexer = lexers.Fallback
 		}
 		iterator, _ := lexer.Tokenise(nil, string(*data))
 		formatter := formatters.Get("terminal256")
-		formatter.Format(cmd.OutOrStdout(), styles.Get(theme), iterator)
+		formatter.Format(out, styles.Get(theme), iterator)
 	} else {
-		cmd.Print(string(*data))
+		fmt.Fprint(out, string(*data))
 	}
 }
 
@@ -131,4 +143,45 @@ func printThemes(cmd *cobra.Command) {
 		printData(&code, cmd, lexer)
 		cmd.Println()
 	}
+}
+
+type numberWriter struct {
+	w           io.Writer
+	currentLine int64
+	buf         []byte
+}
+
+func (w *numberWriter) Write(p []byte) (n int, err error) {
+
+	var (
+		original = p
+		tokenLen int
+	)
+	for i, c := range original {
+		tokenLen++
+		if c != '\n' {
+			continue
+		}
+
+		token := p[:tokenLen]
+		p = original[i+1:]
+		tokenLen = 0
+
+		format := "%6d\t%s%s"
+		if w.currentLine > 999999 {
+			format = "%d\t%s%s"
+		}
+
+		_, er := fmt.Fprintf(w.w, format, w.currentLine, string(w.buf), string(token))
+		if er != nil {
+			return i + 1, er
+		}
+		w.buf = w.buf[:0]
+		w.currentLine++
+	}
+
+	if len(p) > 0 {
+		w.buf = append(w.buf, p...)
+	}
+	return len(original), nil
 }
