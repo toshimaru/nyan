@@ -1,5 +1,5 @@
 name: Coverage with CodeClimate
-on: [push]
+on: [push, pull_request]
 jobs:
   codeclimate-report:
     runs-on: ubuntu-latest
