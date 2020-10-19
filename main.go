@@ -30,7 +30,8 @@ var rootCmd = &cobra.Command{
 	Long:  "Colored cat command which supports syntax highlighting.",
 	Example: `$ nyan FILE
 $ nyan FILE1 FILE2 FILE3
-$ nyan -t solarized-dark FILE`,
+$ nyan -t solarized-dark FILE
+$ nyan -l go FILE`,
 	RunE:          cmdMain,
 	SilenceErrors: true,
 	SilenceUsage:  false,
@@ -66,7 +67,7 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 
 	if len(args) < 1 || args[0] == "-" {
 		if data, err = ioutil.ReadAll(cmd.InOrStdin()); err != nil {
-			cmd.PrintErr("Error: ", err, "\n")
+			cmd.PrintErrln("Error:", err)
 			return
 		}
 		if language != "" {
@@ -79,8 +80,7 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 		var lastErr error
 		for _, filename := range args {
 			if data, err = ioutil.ReadFile(filename); err != nil {
-				// FIXME: use PrintErrln after upstream is fixed
-				cmd.PrintErr("Error: ", err, "\n")
+				cmd.PrintErrln("Error:", err)
 				lastErr = err
 				continue
 			}
