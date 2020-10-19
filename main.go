@@ -30,7 +30,8 @@ var rootCmd = &cobra.Command{
 	Long:  "Colored cat command which supports syntax highlighting.",
 	Example: `$ nyan FILE
 $ nyan FILE1 FILE2 FILE3
-$ nyan -t solarized-dark FILE`,
+$ nyan -t solarized-dark FILE
+$ nyan -l go FILE`,
 	RunE:          cmdMain,
 	SilenceErrors: true,
 	SilenceUsage:  false,
