@@ -103,7 +103,6 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 }
 
 func printData(data *[]byte, cmd *cobra.Command, lexer chroma.Lexer) {
-
 	out := cmd.OutOrStdout()
 	if number {
 		w := &numberWriter{
@@ -149,15 +148,14 @@ func printThemes(cmd *cobra.Command) {
 
 type numberWriter struct {
 	w           io.Writer
-	currentLine int64
+	currentLine uint64
 	buf         []byte
 }
 
 func (w *numberWriter) Write(p []byte) (n int, err error) {
-
 	var (
 		original = p
-		tokenLen int
+		tokenLen uint
 	)
 	for i, c := range original {
 		tokenLen++
