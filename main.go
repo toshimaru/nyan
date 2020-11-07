@@ -195,6 +195,14 @@ func (w *numberWriter) Write(p []byte) (n int, err error) {
 }
 
 func (w *numberWriter) Flush() error {
+	terminalReset := []byte("\u001B[0m")
+	if bytes.Compare(w.buf, terminalReset) == 0{
+		// In almost all cases, a control code is passed last to reset the terminal's color code.
+		// This is not a printable character and should not be counted as a line, so it is output as is without a line number.
+		_, err := fmt.Fprintf(w.w, "%s", string(w.buf))
+		return err
+	}
+
 	format := "%6d\t%s"
 	if w.currentLine > 999999 {
 		format = "%d\t%s"
