@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -153,6 +154,13 @@ type numberWriter struct {
 }
 
 func (w *numberWriter) Write(p []byte) (n int, err error) {
+	// Early return.
+	// Can't calculate the line numbers until the line breaks are made, so store them all in a buffer.
+	if !bytes.Contains(p, []byte{'\n'}) {
+		w.buf = append(w.buf, p...)
+		return len(p), nil
+	}
+
 	var (
 		original = p
 		tokenLen uint
