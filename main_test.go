@@ -2,9 +2,11 @@ package main
 
 import (
 	"bytes"
+	"fmt"
 	"io/ioutil"
 	"os/exec"
 	"runtime"
+	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -14,12 +16,6 @@ const (
 	highlightedGoCode   = "[38;5;197mpackage[0m[38;5;231m"
 	unhighlightedGoCode = "[38;5;231mpackage main[0m[38;5;231m"
 )
-
-func TestMain(m *testing.M) {
-	rootCmd.SetArgs([]string{"--help"})
-	main()
-	resetFlags()
-}
 
 func TestCommandExecute(t *testing.T) {
 	err := rootCmd.Execute()
@@ -310,6 +306,32 @@ func TestShell(t *testing.T) {
 		assert.Nil(t, err)
 		assert.Equal(t, "package main\n", string(data))
 	})
+}
+
+func TestNumberOption(t *testing.T) {
+	var o, e bytes.Buffer
+	rootCmd.SetArgs([]string{"-n", "testdata/dummy.go"})
+	rootCmd.SetIn(nil)
+	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
+	err := rootCmd.Execute()
+
+	assert.Nil(t, err)
+
+	// Line number check at the beginning of a line.
+	lines := strings.Split(o.String(), "\n")
+	for i, line := range lines {
+		want := fmt.Sprintf("%6d\t", i+1)
+		if !strings.HasPrefix(line, want) {
+			t.Logf("want: %s got: %s", want, line)
+		}
+	}
+
+	// EOF line feed check.
+	lastLine := lines[len(lines)-1]
+	if strings.Contains(lastLine, "\n") {
+		t.Fatal("The EOF has an unnecessary line break")
+	}
 }
 
 func resetFlags() {
