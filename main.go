@@ -60,10 +60,10 @@ func main() {
 }
 
 func cmdMain(cmd *cobra.Command, args []string) (err error) {
-	if showVersion {
+	if showVersion{
 		cmd.Println("version", version)
 		return
-	} else if listThemes {
+	} else if listThemes{
 		printThemes(cmd)
 		return
 	}
