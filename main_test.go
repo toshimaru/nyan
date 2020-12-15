@@ -17,6 +17,12 @@ const (
 	unhighlightedGoCode = "[38;5;231mpackage main[0m[38;5;231m"
 )
 
+func TestMainFunc(t *testing.T) {
+	rootCmd.SetArgs([]string{"--help"})
+	main()
+	resetFlags()
+}
+
 func TestCommandExecute(t *testing.T) {
 	err := rootCmd.Execute()
 
