@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"io"
 	"io/ioutil"
 	"os"
 
@@ -22,6 +24,7 @@ var (
 	showVersion bool
 	theme       string
 	language    string
+	number      bool
 )
 
 var rootCmd = &cobra.Command{
@@ -42,6 +45,7 @@ func init() {
 	rootCmd.PersistentFlags().BoolVarP(&showVersion, "version", "v", false, `Show version`)
 	rootCmd.PersistentFlags().StringVarP(&theme, "theme", "t", "monokai", fmt.Sprintf("Set color theme for syntax highlighting\nAvailable themes: %s", styles.Names()))
 	rootCmd.PersistentFlags().StringVarP(&language, "language", "l", "", "Specify language for syntax highlighting")
+	rootCmd.PersistentFlags().BoolVarP(&number, "number", "n", false, "number all output lines")
 
 	rootCmd.SetOut(colorable.NewColorableStdout())
 	rootCmd.SetErr(colorable.NewColorableStderr())
@@ -100,15 +104,25 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 }
 
 func printData(data *[]byte, cmd *cobra.Command, lexer chroma.Lexer) {
+	out := cmd.OutOrStdout()
+	if number {
+		w := &numberWriter{
+			w:           out,
+			currentLine: 1,
+		}
+		out = w
+		defer w.Flush()
+	}
+
 	if isTerminalFunc(os.Stdout.Fd()) {
 		if lexer == nil {
 			lexer = lexers.Fallback
 		}
 		iterator, _ := lexer.Tokenise(nil, string(*data))
 		formatter := formatters.Get("terminal256")
-		formatter.Format(cmd.OutOrStdout(), styles.Get(theme), iterator)
+		formatter.Format(out, styles.Get(theme), iterator)
 	} else {
-		cmd.Print(string(*data))
+		fmt.Fprint(out, string(*data))
 	}
 }
 
@@ -131,4 +145,69 @@ func printThemes(cmd *cobra.Command) {
 		printData(&code, cmd, lexer)
 		cmd.Println()
 	}
+}
+
+type numberWriter struct {
+	w           io.Writer
+	currentLine uint64
+	buf         []byte
+}
+
+func (w *numberWriter) Write(p []byte) (n int, err error) {
+	// Early return.
+	// Can't calculate the line numbers until the line breaks are made, so store them all in a buffer.
+	if !bytes.Contains(p, []byte{'\n'}) {
+		w.buf = append(w.buf, p...)
+		return len(p), nil
+	}
+
+	var (
+		original = p
+		tokenLen uint
+	)
+	for i, c := range original {
+		tokenLen++
+		if c != '\n' {
+			continue
+		}
+
+		token := p[:tokenLen]
+		p = original[i+1:]
+		tokenLen = 0
+
+		format := "%6d\t%s%s"
+		if w.currentLine > 999999 {
+			format = "%d\t%s%s"
+		}
+
+		_, er := fmt.Fprintf(w.w, format, w.currentLine, string(w.buf), string(token))
+		if er != nil {
+			return i + 1, er
+		}
+		w.buf = w.buf[:0]
+		w.currentLine++
+	}
+
+	if len(p) > 0 {
+		w.buf = append(w.buf, p...)
+	}
+	return len(original), nil
+}
+
+func (w *numberWriter) Flush() error {
+	terminalReset := []byte("\u001B[0m")
+	if bytes.Compare(w.buf, terminalReset) == 0{
+		// In almost all cases, a control code is passed last to reset the terminal's color code.
+		// This is not a printable character and should not be counted as a line, so it is output as is without a line number.
+		_, err := fmt.Fprintf(w.w, "%s", string(w.buf))
+		return err
+	}
+
+	format := "%6d\t%s"
+	if w.currentLine > 999999 {
+		format = "%d\t%s"
+	}
+	_, err := fmt.Fprintf(w.w, format, w.currentLine, string(w.buf))
+	w.buf = w.buf[:0]
+	return err
 }
