@@ -5,6 +5,7 @@ jobs:
     name: reviewdog
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - uses: reviewdog/action-setup@v1
       - name: Run reviewdog
         env:
