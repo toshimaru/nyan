@@ -9,3 +9,4 @@ runner:
     format: govet
   gofmt:
     cmd: gofmt -s -d .
+    format: diff
