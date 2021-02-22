@@ -7,7 +7,7 @@ import (
 	"io/ioutil"
 	"os"
 
-				"github.com/alecthomas/chroma"
+	"github.com/alecthomas/chroma"
 	"github.com/alecthomas/chroma/formatters"
 	"github.com/alecthomas/chroma/lexers"
 	"github.com/mattn/go-colorable"
