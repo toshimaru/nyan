@@ -8,5 +8,5 @@ runner:
     cmd: go vet -all .
     format: govet
   gofmt:
-    cmd: gofmt -s -d .
+    cmd: test -z $(gofmt -l  .) || (gofmt -s -d  . && exit 1)
     format: diff
