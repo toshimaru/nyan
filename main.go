@@ -17,7 +17,7 @@ import (
 )
 
 var (
-	isTerminalFunc  = isatty.IsTerminal
+	isTerminalFunc = isatty.IsTerminal
 	version        = "dev"
 
 	listThemes  bool
