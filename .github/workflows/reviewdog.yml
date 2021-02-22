@@ -7,7 +7,10 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: install tools
-        run: go get -u golang.org/x/lint/golint
+        run: |
+          go get -u golang.org/x/lint/golint
+          which golint
+          golint ./...
       - uses: reviewdog/action-setup@v1
       - name: Run reviewdog
         env:
