@@ -7,3 +7,5 @@ runner:
   govet:
     cmd: go vet -all .
     format: govet
+  gofmt:
+    cmd: gofmt -s -d .
