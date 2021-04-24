@@ -57,7 +57,7 @@ func main() {
 	}
 }
 
-func cmdMain(cmd *cobra.Command, args []string) (err error) {
+func cmd_Main(cmd *cobra.Command, args []string) (err error) {
 	if showVersion {
 		cmd.Println("version", version)
 		return
