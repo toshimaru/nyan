@@ -20,7 +20,6 @@ func Register(style *chroma.Style) *chroma.Style {
 
 // Names of all available styles.
 func Names() []string {
-	unused := 0
 	out := []string{}
 	for name := range Registry {
 		out = append(out, name)
