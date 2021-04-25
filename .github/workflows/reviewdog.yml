@@ -9,10 +9,10 @@ jobs:
       - uses: actions/setup-go@v2
         with:
           go-version: '1.16'
-      - run: go mod download
       - name: install tools
         run: |
           go get -u golang.org/x/lint/golint
+          go get github.com/mattn/go-isatty
       - uses: reviewdog/action-setup@v1
       - name: Run reviewdog
         env:
