@@ -5,7 +5,7 @@ runner:
       - "%f:%l:%c: %m"
     level: warning
   govet:
-    cmd: go vet -all .
+    cmd: go vet ./...
     format: govet
   gofmt:
     cmd: test -z $(gofmt -l  .) || (gofmt -s -d  . && exit 1)

@@ -18,4 +18,5 @@ jobs:
         run: |
           reviewdog -reporter=github-pr-review \
                     -runners=golint,govet,gofmt \
-                    -fail-on-error=true
+                    -fail-on-error
+      - run: go vet ./...
