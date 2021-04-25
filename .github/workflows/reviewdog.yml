@@ -20,4 +20,5 @@ jobs:
           reviewdog -reporter=github-pr-review \
                     -runners=golint,govet,gofmt \
                     -fail-on-error
+      # reviewdog doesn't work with go vet, so run again
       - run: go vet ./...
