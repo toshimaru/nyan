@@ -8,10 +8,11 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-go@v2
         with:
-          go-version: '1.15'
+          go-version: '1.16'
       - name: install tools
         run: |
           go get -u golang.org/x/lint/golint
+          go get github.com/mattn/go-isatty
       - uses: reviewdog/action-setup@v1
       - name: Run reviewdog
         env:
