@@ -17,7 +17,7 @@ archives:
     386: i386
     amd64: x86_64
 checksum:
-  name_template: 'checksums.txt'
+  name_template: '{{ .ProjectName }}_checksums.txt'
 snapshot:
   name_template: "{{ .Tag }}-next"
 changelog:
@@ -26,11 +26,13 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+    - Merge pull request
 brews:
 - tap:
     owner: toshimaru
     name: homebrew-nyan
   description: Colored cat command which supports syntax highlighting. 
   homepage: https://github.com/toshimaru/nyan
+  license: MIT
   test: |
     system "#{bin}/nyan -v"
