@@ -24,6 +24,12 @@ $ brew install toshimaru/nyan/nyan
 $ go get github.com/toshimaru/nyan
 ```
 
+### go install (requires Go 1.16+)
+
+```console
+$ go install github.com/toshimaru/nyan@latest
+```
+
 ## Usage
 
 ```
@@ -43,7 +49,7 @@ $ nyan FILE
 - swapoff
 - vim
 
-You can see available color themes with the command:
+You can list and preview available color themes with the command:
 
 ```
 $ nyan --list-themes
