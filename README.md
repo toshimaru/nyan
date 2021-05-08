@@ -24,13 +24,29 @@ $ brew install toshimaru/nyan/nyan
 $ go get github.com/toshimaru/nyan
 ```
 
+### go install (requires Go 1.16+)
+
+```console
+$ go install github.com/toshimaru/nyan@latest
+```
+
 ## Usage
 
 ```
 $ nyan FILE
 ```
 
-## Available Themes
+### Available Options
+
+| Option | Description |
+| --- | --- |
+| `-h`, `--help` | Show help |
+| `-l`, `--language` lang | Specify language for syntax highlighting |
+| `-T`, `--list-themes` | List available color themes |
+| `-n`, `--number` | Output with line numbers |
+| `-t`,` --theme` theme | Set color theme for syntax highlighting |
+
+## Available Color Themes
 
 - abap
 - dracula
@@ -43,7 +59,7 @@ $ nyan FILE
 - swapoff
 - vim
 
-You can see available color themes with the command:
+You can list and preview available color themes with the command:
 
 ```
 $ nyan --list-themes
