@@ -33,11 +33,11 @@ changelog:
     - '^test:'
     - Merge pull request
 brews:
-- tap:
-    owner: toshimaru
-    name: homebrew-nyan
-  description: Colored cat command which supports syntax highlighting. 
-  homepage: https://github.com/toshimaru/nyan
-  license: MIT
-  test: |
-    system "#{bin}/nyan -v"
+  - tap:
+      owner: toshimaru
+      name: homebrew-nyan
+    description: Colored cat command which supports syntax highlighting
+    homepage: https://github.com/toshimaru/nyan
+    license: MIT
+    test: |
+      system "#{bin}/nyan", "-v"
