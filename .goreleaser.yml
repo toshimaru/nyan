@@ -8,6 +8,8 @@ builds:
   ignore:
     - goos: darwin
       goarch: 386
+    - goos: windows
+      goarch: arm64
 archives:
 - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}'
   replacements:
