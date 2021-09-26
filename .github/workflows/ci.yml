@@ -22,10 +22,16 @@ jobs:
       run: |
         go build -v
         go test ./...
-    - name: Run GoReleaser
-      uses: goreleaser/goreleaser-action@master
+    - name: goreleaser check
+      uses: goreleaser/goreleaser-action@v2
       with:
-        args: release --snapshot --skip-publish --rm-dist
+        args: check
+
+    # - name: goreleaser test
+    #   uses: goreleaser/goreleaser-action@v2
+    #   with:
+    #     args: check --snapshot --skip-publish --rm-dist
+
     # GitHub Actions doesn't support colored output, so comment it out temporarily.
     # - name: Colored Output Test
     #   run: go run main.go -- main.go
