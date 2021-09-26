@@ -17,7 +17,7 @@ archives:
     386: i386
     amd64: x86_64
 checksum:
-  name_template: '{{ .ProjectName }}_checksums.txt'
+  name_template: 'checksums.txt'
 snapshot:
   name_template: "{{ incpatch .Version }}-next"
 changelog:
