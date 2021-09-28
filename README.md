@@ -69,6 +69,6 @@ $ nyan --list-themes
 
 ## What is nyan?
 
-`nyan` originates from [nyan-cat](http://www.nyan.cat/).
+`nyan` originates from [Nyan Cat](https://www.nyan.cat/) (Music by [daniwell](https://aidn.jp/about/)).
 
 ![nyancat](https://giphygifs.s3.amazonaws.com/media/sIIhZliB2McAo/giphy.gif)
