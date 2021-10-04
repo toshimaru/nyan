@@ -9,7 +9,7 @@ jobs:
       with:
         go-version: '1.17'
     - run: go build
-    - uses: paambaati/codeclimate-action@v2.7.5
+    - uses: paambaati/codeclimate-action@v3.0.0
       env:
         CC_TEST_REPORTER_ID: f4c78effd3a10a5a45239e6886b35f42475467ad53f09a01002feeb04eb92d5b
       with:
