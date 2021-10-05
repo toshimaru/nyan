@@ -8,7 +8,7 @@
 
 Colored `cat` command which supports syntax highlighting.
 
-![Screen Capture](https://user-images.githubusercontent.com/803398/63024853-00b18b80-bee3-11e9-853a-eea7e790a575.png)
+![OG image for nyan command](https://repository-images.githubusercontent.com/195893425/0a7e7dfc-3a80-49d5-8193-5482fe2e7848)
 
 ## Installation
 
@@ -32,7 +32,7 @@ $ go install github.com/toshimaru/nyan@latest
 
 ## Usage
 
-```
+```console
 $ nyan FILE
 ```
 
@@ -61,7 +61,7 @@ $ nyan FILE
 
 You can list and preview available color themes with the command:
 
-```
+```console
 $ nyan --list-themes
 ```
 
