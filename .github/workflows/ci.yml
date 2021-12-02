@@ -25,13 +25,7 @@ jobs:
     - name: goreleaser check
       uses: goreleaser/goreleaser-action@v2
       with:
-        args: check
-
-    # cf. https://github.com/toshimaru/nyan/issues/119
-    # - name: Run GoReleaser
-    #   uses: goreleaser/goreleaser-action@v2
-    #   with:
-    #     args: release --snapshot --skip-publish --rm-dist
+        args: release --snapshot --skip-publish --rm-dist
 
     # GitHub Actions doesn't support colored output, so comment it out temporarily.
     # - name: Colored Output Test
