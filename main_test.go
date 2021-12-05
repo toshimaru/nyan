@@ -9,6 +9,10 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestMainFunc(t *testing.T) {
+	main()
+}
+
 func TestShell(t *testing.T) {
 	t.Run("echo+pipe", func(t *testing.T) {
 		cmd := exec.Command("bash", "-c", "echo pipetest | ./nyan")

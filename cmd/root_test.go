@@ -15,7 +15,7 @@ const (
 	unhighlightedGoCode = "[38;5;231mpackage main[0m[38;5;231m"
 )
 
-func TestMainFunc(t *testing.T) {
+func TestExecute(t *testing.T) {
 	rootCmd.SetArgs([]string{"--help"})
 	Execute()
 	resetFlags()
@@ -54,7 +54,7 @@ func TestInvalidFilename(t *testing.T) {
 	assert.Contains(t, e.String(), invalidFileErrorMsg())
 }
 
-func TestExecute(t *testing.T) {
+func TestCmdExecute(t *testing.T) {
 	var o, e bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go"})
@@ -68,7 +68,7 @@ func TestExecute(t *testing.T) {
 	assert.Contains(t, o.String(), highlightedGoCode)
 }
 
-func TestExecuteWithAnalyseUnknownFile(t *testing.T) {
+func TestUnknownExtension(t *testing.T) {
 	var o, e bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
 	rootCmd.SetArgs([]string{"testdata/dummy.go.unknown"})
