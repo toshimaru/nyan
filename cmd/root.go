@@ -51,6 +51,7 @@ func init() {
 	rootCmd.SetErr(colorable.NewColorableStderr())
 }
 
+// Execute root commands. This is called by `main.main()`.
 func Execute() {
 	if err := rootCmd.Execute(); err != nil {
 		os.Exit(1)
