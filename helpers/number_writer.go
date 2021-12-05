@@ -1,4 +1,4 @@
-package main
+package helpers
 
 import (
 	"bytes"
@@ -6,13 +6,13 @@ import (
 	"io"
 )
 
-type numberWriter struct {
+type NumberWriter struct {
 	w           io.Writer
 	currentLine uint64
 	buf         []byte
 }
 
-func (w *numberWriter) Write(p []byte) (n int, err error) {
+func (w *NumberWriter) Write(p []byte) (n int, err error) {
 	// Early return.
 	// Can't calculate the line numbers until the line breaks are made, so store them all in a buffer.
 	if !bytes.Contains(p, []byte{'\n'}) {
@@ -53,7 +53,7 @@ func (w *numberWriter) Write(p []byte) (n int, err error) {
 	return len(original), nil
 }
 
-func (w *numberWriter) Flush() error {
+func (w *NumberWriter) Flush() error {
 	terminalReset := []byte("\u001B[0m")
 	if bytes.Compare(w.buf, terminalReset) == 0 {
 		// In almost all cases, a control code is passed last to reset the terminal's color code.

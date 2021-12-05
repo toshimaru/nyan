@@ -1,4 +1,4 @@
-package main
+package cmd
 
 import (
 	"bytes"
@@ -19,7 +19,7 @@ const (
 
 func TestMainFunc(t *testing.T) {
 	rootCmd.SetArgs([]string{"--help"})
-	main()
+	Execute()
 	resetFlags()
 }
 
