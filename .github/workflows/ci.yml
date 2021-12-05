@@ -22,7 +22,7 @@ jobs:
       run: |
         go build -v
         go test ./...
-    - name: goreleaser check
+    - name: Run GoReleaser
       uses: goreleaser/goreleaser-action@v2
       with:
         args: release --snapshot --skip-publish --rm-dist
