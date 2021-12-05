@@ -70,14 +70,16 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 	var data []byte
 	var lexer chroma.Lexer
 
+	if language != "" {
+		lexer = lexers.Get(language)
+	}
+
 	if len(args) < 1 || args[0] == "-" {
 		if data, err = ioutil.ReadAll(cmd.InOrStdin()); err != nil {
 			cmd.PrintErrln("Error:", err)
 			return
 		}
-		if language != "" {
-			lexer = lexers.Get(language)
-		} else {
+		if lexer == nil {
 			lexer = lexers.Analyse(string(data))
 		}
 		printData(&data, cmd, lexer)
@@ -89,9 +91,7 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 				lastErr = err
 				continue
 			}
-			if language != "" {
-				lexer = lexers.Get(language)
-			} else {
+			if language == "" {
 				lexer = lexers.Match(filename)
 			}
 			printData(&data, cmd, lexer)
