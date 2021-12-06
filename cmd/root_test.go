@@ -141,34 +141,35 @@ func TestMultipleFilesWithInvalidFileError(t *testing.T) {
 	assert.Contains(t, o.String(), "[38;5;231mThis is dummy.[0m")
 	assert.Contains(t, e.String(), invalidFileErrorMsg())
 }
-func TestInvalidTheme(t *testing.T) {
+
+func testThemes(t *testing.T) {
 	var o, e bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }
-	rootCmd.SetArgs([]string{"testdata/dummy.go", "--theme", "invalid"})
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
-	err := rootCmd.Execute()
-	resetStrings()
 
-	assert.Nil(t, err)
-	assert.Empty(t, e.String())
-	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), "[1m[38;5;231mpackage")
-}
+	t.Run("Valid Theme", func(t *testing.T) {
+		rootCmd.SetArgs([]string{"testdata/dummy.go", "--theme", "vim"})
+		err := rootCmd.Execute()
+		resetStrings()
 
-func TestValidTheme(t *testing.T) {
-	var o, e bytes.Buffer
-	isTerminalFunc = func(fd uintptr) bool { return true }
-	rootCmd.SetArgs([]string{"testdata/dummy.go", "--theme", "vim"})
-	rootCmd.SetOut(&o)
-	rootCmd.SetErr(&e)
-	err := rootCmd.Execute()
-	resetStrings()
+		assert.Nil(t, err)
+		assert.Empty(t, e.String())
+		assert.NotNil(t, o.String())
+		assert.Contains(t, o.String(), "[38;5;164mpackage[0m")
+	})
 
-	assert.Nil(t, err)
-	assert.Empty(t, e.String())
-	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), "[38;5;164mpackage[0m")
+	t.Run("Inalid Theme", func(t *testing.T) {
+		o.Reset()
+		rootCmd.SetArgs([]string{"testdata/dummy.go", "--theme", "invalid"})
+		err := rootCmd.Execute()
+		resetStrings()
+
+		assert.Nil(t, err)
+		assert.Empty(t, e.String())
+		assert.NotNil(t, o.String())
+		assert.Contains(t, o.String(), "[1m[38;5;231mpackage")
+	})
 }
 
 func TestSpecialFlags(t *testing.T) {
