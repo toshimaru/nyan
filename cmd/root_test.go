@@ -171,33 +171,49 @@ func TestValidTheme(t *testing.T) {
 	assert.Contains(t, o.String(), "[38;5;164mpackage[0m")
 }
 
-func TestVersionFlag(t *testing.T) {
+func TestSpecialFlags(t *testing.T) {
 	var o, e bytes.Buffer
-	rootCmd.SetArgs([]string{"-v"})
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
-	err := rootCmd.Execute()
-	resetFlags()
 
-	assert.Nil(t, err)
-	assert.Empty(t, e.String())
-	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), "version ")
-}
+	t.Run("version Flag", func(t *testing.T) {
+		rootCmd.SetArgs([]string{"--version"})
+		err := rootCmd.Execute()
+		resetFlags()
 
-func TestListThemesFlag(t *testing.T) {
-	var o, e bytes.Buffer
-	rootCmd.SetArgs([]string{"--list-themes"})
-	rootCmd.SetOut(&o)
-	rootCmd.SetErr(&e)
-	err := rootCmd.Execute()
-	resetFlags()
+		assert.Nil(t, err)
+		assert.Empty(t, e.String())
+		assert.NotNil(t, o.String())
+		assert.Contains(t, o.String(), "version ")
+		assert.NotContains(t, o.String(), "Theme: ")
+	})
 
-	assert.Nil(t, err)
-	assert.Empty(t, e.String())
-	assert.NotNil(t, o.String())
-	assert.Contains(t, o.String(), "Theme: ")
-	assert.Contains(t, o.String(), "Sample Code in Go")
+	t.Run("listThemes Flag", func(t *testing.T) {
+		o.Reset()
+		rootCmd.SetArgs([]string{"--list-themes"})
+		err := rootCmd.Execute()
+		resetFlags()
+
+		assert.Nil(t, err)
+		assert.Empty(t, e.String())
+		assert.NotNil(t, o.String())
+		assert.Contains(t, o.String(), "Theme: ")
+		assert.Contains(t, o.String(), "Sample Code in Go")
+		assert.NotContains(t, o.String(), "version ")
+	})
+
+	t.Run("multiple flags", func(t *testing.T) {
+		o.Reset()
+		rootCmd.SetArgs([]string{"--version", "--list-themes"})
+		err := rootCmd.Execute()
+		resetFlags()
+
+		assert.Nil(t, err)
+		assert.Empty(t, e.String())
+		assert.NotNil(t, o.String())
+		assert.Contains(t, o.String(), "version ")
+		assert.NotContains(t, o.String(), "Theme: ")
+	})
 }
 
 func TestUnknownFile(t *testing.T) {

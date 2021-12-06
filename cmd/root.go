@@ -59,11 +59,7 @@ func Execute() {
 }
 
 func cmdMain(cmd *cobra.Command, args []string) (err error) {
-	if showVersion {
-		cmd.Println("version", version)
-		return
-	} else if listThemes {
-		printThemes(cmd)
+	if checkSpecialFlags(cmd) {
 		return
 	}
 
@@ -125,6 +121,17 @@ func printData(data *[]byte, cmd *cobra.Command, lexer chroma.Lexer) {
 	} else {
 		fmt.Fprint(out, string(*data))
 	}
+}
+
+func checkSpecialFlags(cmd *cobra.Command) bool {
+	if showVersion {
+		cmd.Println("version", version)
+		return true
+	} else if listThemes {
+		printThemes(cmd)
+		return true
+	}
+	return false
 }
 
 const sampleCode = `
