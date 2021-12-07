@@ -10,6 +10,9 @@ builds:
       goarch: 386
     - goos: windows
       goarch: arm64
+  ldflags:
+    - -s -w -X github.com/toshimaru/nyan/cmd.version={{.Version}}
+
 archives:
   - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}'
     replacements:
@@ -32,6 +35,7 @@ changelog:
     - '^docs:'
     - '^test:'
     - Merge pull request
+
 brews:
   - tap:
       owner: toshimaru
