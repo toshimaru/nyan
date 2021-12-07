@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"io/ioutil"
+	"os"
 	"os/exec"
 	"testing"
 
@@ -59,7 +59,7 @@ func TestShell(t *testing.T) {
 		outfile := "testdata/output"
 		cmd := exec.Command("bash", "-c", "echo 'package main' | ./nyan > "+outfile)
 		err := cmd.Run()
-		data, err := ioutil.ReadFile(outfile)
+		data, err := os.ReadFile(outfile)
 		assert.Nil(t, err)
 		assert.Equal(t, "package main\n", string(data))
 	})

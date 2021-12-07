@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"os"
 
 	"github.com/alecthomas/chroma"
@@ -71,7 +70,7 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 	}
 
 	if len(args) < 1 || args[0] == "-" {
-		if data, err = ioutil.ReadAll(cmd.InOrStdin()); err != nil {
+		if data, err = io.ReadAll(cmd.InOrStdin()); err != nil {
 			cmd.PrintErrln("Error:", err)
 			return
 		}
@@ -82,7 +81,7 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 	} else {
 		var lastErr error
 		for _, filename := range args {
-			if data, err = ioutil.ReadFile(filename); err != nil {
+			if data, err = os.ReadFile(filename); err != nil {
 				cmd.PrintErrln("Error:", err)
 				lastErr = err
 				continue
