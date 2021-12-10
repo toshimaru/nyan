@@ -69,10 +69,12 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 		lexer = lexers.Get(language)
 	}
 
+	cmd.SilenceUsage = true
+
 	if len(args) < 1 || args[0] == "-" {
 		if data, err = io.ReadAll(cmd.InOrStdin()); err != nil {
 			cmd.PrintErrln("Error:", err)
-			return
+			return err
 		}
 		if lexer == nil {
 			lexer = lexers.Analyse(string(data))
@@ -92,7 +94,6 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 			printData(&data, cmd, lexer)
 		}
 		if lastErr != nil {
-			cmd.SilenceUsage = true
 			return lastErr
 		}
 	}
