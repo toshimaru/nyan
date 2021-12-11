@@ -1,25 +1,22 @@
 name: reviewdog
-on: [pull_request]
+on: [pull_request_target]
 jobs:
   reviewdog:
     name: reviewdog
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
       - uses: actions/setup-go@v2
         with:
           go-version: '1.17'
-      - name: install tools
-        run: |
-          go get -u golang.org/x/lint/golint
-          go get github.com/mattn/go-isatty
+      - uses: reviewdog/action-staticcheck@v1
+        with:
+          fail_on_error: true
       - uses: reviewdog/action-setup@v1
       - name: Run reviewdog
         env:
           REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          reviewdog -reporter=github-pr-review \
-                    -runners=golint,govet,gofmt \
-                    -fail-on-error
-      # reviewdog doesn't work with go vet, so run again
-      - run: go vet ./...
+          reviewdog -reporter=github-pr-review -runners=gofmt
