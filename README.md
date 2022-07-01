@@ -44,7 +44,7 @@ $ nyan FILE
 | `-l`, `--language` lang | Specify language for syntax highlighting |
 | `-T`, `--list-themes` | List available color themes |
 | `-n`, `--number` | Output with line numbers |
-| `-t`,` --theme` theme | Set color theme for syntax highlighting |
+| `-t`, `--theme` theme | Set color theme for syntax highlighting |
 
 ## Available Color Themes
 
