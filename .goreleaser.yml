@@ -69,3 +69,6 @@ brews:
     license: MIT
     test: |
       system "#{bin}/nyan", "-v"
+
+release:
+  name_template: "v{{ .Version }}"
