@@ -1,43 +1,67 @@
-builds:
-- env:
-    - CGO_ENABLED=0
-  goos:
-    - linux
-    - darwin
-    - windows
-  ignore:
-    - goos: darwin
-      goarch: 386
-    - goos: windows
-      goarch: arm64
-  ldflags:
-    - -s -w -X github.com/toshimaru/nyan/cmd.version={{.Version}}
+before:
+  hooks:
+    - go mod tidy
 
-archives:
-  - name_template: '{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}'
-    replacements:
-      darwin: Darwin
-      linux: Linux
-      windows: Windows
-      386: i386
-      amd64: x86_64
-    format_overrides:
-    - goos: windows
-      format: zip
-checksum:
-  name_template: 'checksums.txt'
 snapshot:
   name_template: "{{ incpatch .Version }}-next"
+
+report_sizes: true
+
+metadata:
+  mod_timestamp: "{{ .CommitTimestamp }}"
+
+builds:
+  - env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - "386"
+      - amd64
+      - arm64
+    ignore:
+      - goos: windows
+        goarch: arm64
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    ldflags:
+      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{ .CommitDate }} -X main.builtBy=goreleaser -X main.treeState={{ .IsGitDirty }}
+
+checksum:
+  name_template: 'checksums.txt'
+
 changelog:
   sort: asc
+  use: github
   filters:
     exclude:
-    - '^docs:'
-    - '^test:'
-    - Merge pull request
+      - merge conflict
+      - Merge pull request
+      - Merge remote-tracking branch
+      - Merge branch
+  groups:
+    - title: "New Features"
+      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+      order: 1
+    - title: "Bug fixes"
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+      order: 3
+    - title: "Documentation updates"
+      regexp: ^.*?doc(\([[:word:]]+\))??!?:.+$
+      order: 5
+    - title: Dependency updates
+      regexp: '^.*?(feat|fix)\(deps\)!?:.+$'
+      order: 10
+
+archives:
+  - name_template: '{{ .ProjectName }}_{{ title .Os }}_{{ .Arch }}'
+    format_overrides:
+      - goos: windows
+        format: zip
 
 brews:
-  - tap:
+  - repository:
       owner: toshimaru
       name: homebrew-nyan
     description: Colored cat command which supports syntax highlighting
