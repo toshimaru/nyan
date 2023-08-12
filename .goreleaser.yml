@@ -7,9 +7,6 @@ snapshot:
 
 report_sizes: true
 
-metadata:
-  mod_timestamp: "{{ .CommitTimestamp }}"
-
 builds:
   - env:
       - CGO_ENABLED=0
@@ -24,9 +21,8 @@ builds:
     ignore:
       - goos: windows
         goarch: arm64
-    mod_timestamp: "{{ .CommitTimestamp }}"
     ldflags:
-      - -s -w -X main.version={{.Version}} -X main.commit={{.Commit}} -X main.date={{ .CommitDate }} -X main.builtBy=goreleaser -X main.treeState={{ .IsGitDirty }}
+      - -s -w -X github.com/toshimaru/nyan/cmd.version={{.Version}}
 
 checksum:
   name_template: 'checksums.txt'
@@ -53,6 +49,8 @@ changelog:
     - title: Dependency updates
       regexp: '^.*?(feat|fix)\(deps\)!?:.+$'
       order: 10
+    - title: Other work
+      order: 99
 
 archives:
   - name_template: '{{ .ProjectName }}_{{ title .Os }}_{{ .Arch }}'
