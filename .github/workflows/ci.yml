@@ -17,12 +17,14 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-go@v4
         with:
-          go-version: '1.20'
+          go-version: '1.21'
       - name: Build & Test
         run: |
           go build -v
           go test ./...
+      # It only runs on Linux because the goreleaser command is executed on Linux.
       - name: Run GoReleaser
+        if: runner.os == 'Linux'
         uses: goreleaser/goreleaser-action@v4
         with:
           args: release --clean --snapshot --skip-publish
