@@ -5,7 +5,7 @@ go 1.21.0
 require (
 	github.com/alecthomas/chroma v0.10.0
 	github.com/mattn/go-colorable v0.1.13
-	github.com/mattn/go-isatty v0.0.19
+	github.com/mattn/go-isatty v0.0.20
 	github.com/spf13/cobra v1.7.0
 	github.com/stretchr/testify v1.8.4
 )
