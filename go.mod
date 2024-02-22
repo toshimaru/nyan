@@ -1,6 +1,6 @@
 module github.com/toshimaru/nyan
 
-go 1.21.0
+go 1.22
 
 require (
 	github.com/alecthomas/chroma v0.10.0
