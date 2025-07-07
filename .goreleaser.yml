@@ -1,9 +1,11 @@
+version: 2
+
 before:
   hooks:
     - go mod tidy
 
 snapshot:
-  name_template: "{{ incpatch .Version }}-next"
+  version_template: "{{ incpatch .Version }}-next"
 
 report_sizes: true
 
@@ -58,7 +60,7 @@ archives:
       - goos: windows
         format: zip
 
-brews:
+homebrew_casks:
   - repository:
       owner: toshimaru
       name: homebrew-nyan
