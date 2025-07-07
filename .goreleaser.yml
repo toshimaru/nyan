@@ -60,7 +60,7 @@ archives:
       - goos: windows
         format: zip
 
-homebrew_casks:
+brews:
   - repository:
       owner: toshimaru
       name: homebrew-nyan
