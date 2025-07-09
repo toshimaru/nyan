@@ -1,9 +1,14 @@
+version: 2
+
 before:
   hooks:
     - go mod tidy
 
 snapshot:
-  name_template: "{{ incpatch .Version }}-next"
+  version_template: "{{ incpatch .Version }}-next"
+
+release:
+  name_template: "v{{ .Version }}"
 
 report_sizes: true
 
@@ -56,17 +61,13 @@ archives:
   - name_template: '{{ .ProjectName }}_{{ title .Os }}_{{ .Arch }}'
     format_overrides:
       - goos: windows
-        format: zip
+        formats: [ zip ]
 
-brews:
+homebrew_casks:
   - repository:
       owner: toshimaru
       name: homebrew-nyan
     description: Colored cat command which supports syntax highlighting
     homepage: https://github.com/toshimaru/nyan
     license: MIT
-    test: |
-      system "#{bin}/nyan", "-v"
 
-release:
-  name_template: "v{{ .Version }}"

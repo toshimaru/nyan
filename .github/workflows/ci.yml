@@ -25,9 +25,9 @@ jobs:
       # It only runs on Linux because the goreleaser command is executed on Linux.
       - name: Run GoReleaser
         if: runner.os == 'Linux'
-        uses: goreleaser/goreleaser-action@v5
+        uses: goreleaser/goreleaser-action@v6
         with:
-          args: release --clean --snapshot --skip-publish
+          args: release --clean --snapshot --skip=publish
       # Output tests
       - name: Normal Output Test
         run: go run main.go -- main.go
