@@ -27,7 +27,7 @@ jobs:
         if: runner.os == 'Linux'
         uses: goreleaser/goreleaser-action@v6
         with:
-          args: release --clean --snapshot --skip-publish
+          args: release --clean --snapshot --skip=publish
       # Output tests
       - name: Normal Output Test
         run: go run main.go -- main.go
