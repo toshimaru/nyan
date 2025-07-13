@@ -1,4 +1,4 @@
-name: Coverage with CodeClimate
+name: Coverage
 on:
   push:
     branches:
@@ -8,7 +8,7 @@ permissions:
   contents: read
   id-token: write
 jobs:
-  codeclimate-report:
+  coverage:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -17,7 +17,9 @@ jobs:
           go-version: "1.24"
       - name: Output coverage report
         run: go build && go test ./... -coverprofile coverage.out
-      - uses: qltysh/qlty-action/coverage@v1
+      # ref. https://github.com/qltysh/example-go
+      - name: Report coverage with Qlty
+        uses: qltysh/qlty-action/coverage@v1
         with:
           oidc: true
           files: coverage.out
