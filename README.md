@@ -1,8 +1,8 @@
 [![Release](https://img.shields.io/github/release/toshimaru/nyan.svg)](https://github.com/toshimaru/nyan/releases/latest)
 ![Go Build & Test](https://github.com/toshimaru/nyan/workflows/Go%20Build%20&%20Test/badge.svg)
 ![Release with goreleaser](https://github.com/toshimaru/nyan/workflows/Release%20with%20goreleaser/badge.svg)
-[![Maintainability](https://api.codeclimate.com/v1/badges/f5063da42c2e2b00e625/maintainability)](https://codeclimate.com/github/toshimaru/nyan/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/f5063da42c2e2b00e625/test_coverage)](https://codeclimate.com/github/toshimaru/nyan/test_coverage)
+[![Maintainability](https://qlty.sh/gh/toshimaru/projects/nyan/maintainability.svg)](https://qlty.sh/gh/toshimaru/projects/nyan)
+[![Code Coverage](https://qlty.sh/gh/toshimaru/projects/nyan/coverage.svg)](https://qlty.sh/gh/toshimaru/projects/nyan)
 
 # nyan
 
