@@ -1,6 +1,6 @@
-[![Release](https://img.shields.io/github/release/toshimaru/nyan.svg)](https://github.com/toshimaru/nyan/releases/latest)
-![Go Build & Test](https://github.com/toshimaru/nyan/workflows/Go%20Build%20&%20Test/badge.svg)
-![Release with goreleaser](https://github.com/toshimaru/nyan/workflows/Release%20with%20goreleaser/badge.svg)
+[![release](https://img.shields.io/github/release/toshimaru/nyan.svg)](https://github.com/toshimaru/nyan/releases/latest)
+[![Go Build & Test](https://github.com/toshimaru/nyan/actions/workflows/ci.yml/badge.svg)](https://github.com/toshimaru/nyan/actions/workflows/ci.yml)
+[![Release](https://github.com/toshimaru/nyan/actions/workflows/release.yml/badge.svg)](https://github.com/toshimaru/nyan/actions/workflows/release.yml)
 [![Maintainability](https://qlty.sh/gh/toshimaru/projects/nyan/maintainability.svg)](https://qlty.sh/gh/toshimaru/projects/nyan)
 [![Code Coverage](https://qlty.sh/gh/toshimaru/projects/nyan/coverage.svg)](https://qlty.sh/gh/toshimaru/projects/nyan)
 
