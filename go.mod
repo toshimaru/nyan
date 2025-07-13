@@ -3,7 +3,7 @@ module github.com/toshimaru/nyan
 go 1.24
 
 require (
-	github.com/alecthomas/chroma/v2 v2.14.0
+	github.com/alecthomas/chroma v0.10.0
 	github.com/mattn/go-colorable v0.1.14
 	github.com/mattn/go-isatty v0.0.20
 	github.com/spf13/cobra v1.9.1
@@ -12,7 +12,7 @@ require (
 
 require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
-	github.com/dlclark/regexp2 v1.11.0 // indirect
+	github.com/dlclark/regexp2 v1.4.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/pmezard/go-difflib v1.0.0 // indirect

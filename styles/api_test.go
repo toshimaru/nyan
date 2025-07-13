@@ -3,7 +3,7 @@ package styles
 import (
 	"testing"
 
-	"github.com/alecthomas/chroma/v2"
+	"github.com/alecthomas/chroma"
 	"github.com/stretchr/testify/assert"
 )
 
