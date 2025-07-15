@@ -6,7 +6,7 @@
 
 # nyan
 
-Colored `cat` command which supports syntax highlighting.
+Colorizing `cat` command with syntax highlighting.
 
 ![OG image for nyan command](https://repository-images.githubusercontent.com/195893425/0a7e7dfc-3a80-49d5-8193-5482fe2e7848)
 
