@@ -18,8 +18,24 @@ Colorizing `cat` command with syntax highlighting.
 $ brew install nyan
 ```
 
+> [!NOTE]
+> As of v1.2.0, `nyan` has been merged into [homebrew-core](https://github.com/Homebrew/homebrew-core). :tada:
+>
+> If you see:
+>
+> ```
+> Error: nyan was installed from the toshimaru/nyan tap
+> ```
+>
+> simply reinstall from the core tap:
+>
+> ```console
+> $ brew uninstall nyan
+> $ brew install nyan
+> ```
+
 <details>
-<summary>Homebrew Tap</summary>
+<summary><strong>Install via Homebrew Tap</strong></summary>
 
 ```console
 $ brew install --cask toshimaru/nyan/nyan
