@@ -45,6 +45,8 @@ $ go install github.com/toshimaru/nyan@latest
 $ nyan FILE
 ```
 
+![nyan command sample](https://github.com/user-attachments/assets/ba6a3248-3f8f-49ab-b1b1-1e6c4a084a99)
+
 ### Available Options
 
 | Option | Description |
