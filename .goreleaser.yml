@@ -30,7 +30,7 @@ builds:
       - -s -w -X github.com/toshimaru/nyan/cmd.version={{.Version}}
 
 checksum:
-  name_template: 'checksums.txt'
+  name_template: "checksums.txt"
 
 changelog:
   sort: asc
@@ -58,16 +58,15 @@ changelog:
       order: 99
 
 archives:
-  - name_template: '{{ .ProjectName }}_{{ title .Os }}_{{ .Arch }}'
+  - name_template: "{{ .ProjectName }}_{{ title .Os }}_{{ .Arch }}"
     format_overrides:
       - goos: windows
-        formats: [ zip ]
+        formats: [zip]
 
 homebrew_casks:
   - repository:
       owner: toshimaru
       name: homebrew-nyan
-    description: Colored cat command which supports syntax highlighting
+    description: Colorizing `cat` command with syntax highlighting
     homepage: https://github.com/toshimaru/nyan
     license: MIT
-

@@ -6,7 +6,7 @@
 
 # nyan
 
-Colored `cat` command which supports syntax highlighting.
+Colorizing `cat` command with syntax highlighting.
 
 ![OG image for nyan command](https://repository-images.githubusercontent.com/195893425/0a7e7dfc-3a80-49d5-8193-5482fe2e7848)
 
@@ -15,8 +15,33 @@ Colored `cat` command which supports syntax highlighting.
 ### Homebrew
 
 ```console
-$ brew install toshimaru/nyan/nyan
+$ brew install nyan
 ```
+
+> [!NOTE]
+> As of v1.2.0, `nyan` has been merged into [homebrew-core](https://github.com/Homebrew/homebrew-core). :tada:
+>
+> If you see:
+>
+> ```
+> Error: nyan was installed from the toshimaru/nyan tap
+> ```
+>
+> simply reinstall from the core tap:
+>
+> ```console
+> $ brew uninstall nyan
+> $ brew install nyan
+> ```
+
+<details>
+<summary><strong>Install via Homebrew Tap</strong></summary>
+
+```console
+$ brew install --cask toshimaru/nyan/nyan
+```
+
+</details>
 
 ### go get
 
@@ -35,6 +60,8 @@ $ go install github.com/toshimaru/nyan@latest
 ```console
 $ nyan FILE
 ```
+
+![nyan command sample](https://github.com/user-attachments/assets/ba6a3248-3f8f-49ab-b1b1-1e6c4a084a99)
 
 ### Available Options
 

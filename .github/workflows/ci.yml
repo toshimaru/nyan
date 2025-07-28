@@ -32,7 +32,7 @@ jobs:
       - name: Normal Output Test
         run: go run main.go -- main.go
       # ref. https://github.com/gfx/example-github-actions-with-tty
-      - name: Colored Output Test
+      - name: Colorized Output Test
         if: runner.os == 'Linux'
         shell: 'script -q -e -c "bash {0}"'
         run: go run main.go -- main.go
