@@ -28,8 +28,8 @@ var (
 
 var rootCmd = &cobra.Command{
 	Use:   "nyan [flags] [FILE]...",
-	Short: "Colored cat command.",
-	Long:  "Colored cat command which supports syntax highlighting.",
+	Short: "Colorizing cat command.",
+	Long:  "Colorizing `cat` command with syntax highlighting.",
 	Example: `$ nyan FILE
 $ nyan FILE1 FILE2 FILE3
 $ nyan -t solarized-dark FILE
