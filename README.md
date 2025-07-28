@@ -15,8 +15,17 @@ Colorizing `cat` command with syntax highlighting.
 ### Homebrew
 
 ```console
-$ brew install toshimaru/nyan/nyan
+$ brew install nyan
 ```
+
+<details>
+<summary>Homebrew Tap</summary>
+
+```console
+$ brew install --cask toshimaru/nyan/nyan
+```
+
+</details>
 
 ### go get
 
