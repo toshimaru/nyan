@@ -60,7 +60,7 @@ Tests are located alongside source files (`*_test.go`). The CI runs tests on mul
 
 - `main.go`: CLI entry; calls `cmd.Execute()`.
 - `cmd/`: Cobra commands, flags, and tests (e.g., `cmd/root.go`, `cmd/root_test.go`).
-- `styles/`: Built‑in Chroma themes and small API.
+- `styles/`: Built-in Chroma themes and small API.
 - `testdata/`: Fixtures used by tests.
 - `.github/workflows/`: CI for build, tests, coverage, release.
 - `dist/`: GoReleaser artifacts (ignored in commits).
