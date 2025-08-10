@@ -142,6 +142,18 @@ func TestMultipleFilesWithInvalidFileError(t *testing.T) {
 	assert.Contains(t, e.String(), invalidFileErrorMsg())
 }
 
+func TestCompletionDisabled(t *testing.T) {
+	var o, e bytes.Buffer
+	rootCmd.SetArgs([]string{"completion"})
+	rootCmd.SetOut(&o)
+	rootCmd.SetErr(&e)
+	err := rootCmd.Execute()
+
+	assert.Error(t, err)
+	assert.Contains(t, e.String(), "Error: open completion:")
+	assert.Empty(t, o.String())
+}
+
 func testThemes(t *testing.T) {
 	var o, e bytes.Buffer
 	isTerminalFunc = func(fd uintptr) bool { return true }

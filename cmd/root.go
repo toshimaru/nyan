@@ -34,9 +34,10 @@ var rootCmd = &cobra.Command{
 $ nyan FILE1 FILE2 FILE3
 $ nyan -t solarized-dark FILE
 $ nyan -l go FILE`,
-	RunE:          cmdMain,
-	SilenceErrors: true,
-	SilenceUsage:  false,
+	RunE:              cmdMain,
+	SilenceErrors:     true,
+	SilenceUsage:      false,
+	CompletionOptions: cobra.CompletionOptions{DisableDefaultCmd: true},
 }
 
 func init() {
