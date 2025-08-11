@@ -3,7 +3,7 @@ module github.com/toshimaru/nyan
 go 1.24
 
 require (
-	github.com/alecthomas/chroma/v2 v2.16.0
+	github.com/alecthomas/chroma/v2 v2.18.0
 	github.com/mattn/go-colorable v0.1.14
 	github.com/mattn/go-isatty v0.0.20
 	github.com/spf13/cobra v1.9.1
