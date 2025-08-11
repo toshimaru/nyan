@@ -19,7 +19,7 @@ jobs:
         run: go build && go test ./... -coverprofile coverage.out
       # ref. https://github.com/qltysh/example-go
       - name: Report coverage with Qlty
-        uses: qltysh/qlty-action/coverage@v1
+        uses: qltysh/qlty-action/coverage@v2
         with:
           oidc: true
           files: coverage.out
