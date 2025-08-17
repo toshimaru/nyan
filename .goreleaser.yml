@@ -27,10 +27,17 @@ builds:
     goarch:
       - "386"
       - amd64
+      - arm
       - arm64
+      - riscv64
+    goarm:
+      - "7"
     ignore:
       - goos: windows
-        goarch: arm64
+        goarch: arm
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    flags:
+      - -trimpath
     ldflags:
       - -s -w -X github.com/toshimaru/nyan/cmd.version={{.Version}}
 
