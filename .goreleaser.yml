@@ -14,6 +14,9 @@ release:
 
 report_sizes: true
 
+metadata:
+  mod_timestamp: "{{ .CommitTimestamp }}"
+
 builds:
   - env:
       - CGO_ENABLED=0
