@@ -41,6 +41,9 @@ builds:
     ldflags:
       - -s -w -X github.com/toshimaru/nyan/cmd.version={{.Version}}
 
+universal_binaries:
+  - replace: false
+
 checksum:
   name_template: "checksums.txt"
 
