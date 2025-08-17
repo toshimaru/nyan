@@ -59,16 +59,16 @@ changelog:
       - Merge branch
   groups:
     - title: "New Features"
-      regexp: '^.*?feat(\(.+\))??!?:.+$'
+      regexp: '^.*?feat(\(.+\))?!?:.+$'
       order: 10
     - title: "Security updates"
-      regexp: '^.*?sec(\(.+\))??!?:.+$'
+      regexp: '^.*?sec(\(.+\))?!?:.+$'
       order: 15
     - title: "Bug fixes"
-      regexp: '^.*?(fix|refactor)(\(.+\))??!?:.+$'
+      regexp: '^.*?(fix|refactor)(\(.+\))?!?:.+$'
       order: 20
     - title: "Documentation updates"
-      regexp: ^.*?docs?(\(.+\))??!?:.+$
+      regexp: ^.*?docs?(\(.+\))?!?:.+$
       order: 40
     - title: Dependency updates
       regexp: '^.*?(\w*\(deps?\)|deps?)!?:.+$'
