@@ -98,4 +98,4 @@ $ nyan --list-themes
 
 `nyan` originates from [Nyan Cat](https://www.nyan.cat/) (Music by [daniwell](https://aidn.jp/about/)).
 
-![nyancat](https://giphygifs.s3.amazonaws.com/media/sIIhZliB2McAo/giphy.gif)
+![nyancat](https://www.nyan.cat/cats/original.gif)
