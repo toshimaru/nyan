@@ -5,7 +5,7 @@ go 1.24
 toolchain go1.25.0
 
 require (
-	github.com/alecthomas/chroma/v2 v2.18.0
+	github.com/alecthomas/chroma/v2 v2.19.0
 	github.com/mattn/go-colorable v0.1.14
 	github.com/mattn/go-isatty v0.0.20
 	github.com/spf13/cobra v1.9.1
