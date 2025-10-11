@@ -34,15 +34,6 @@ $ brew install nyan
 > $ brew install nyan
 > ```
 
-<details>
-<summary><strong>Install via Homebrew Tap</strong></summary>
-
-```console
-$ brew install --cask toshimaru/nyan/nyan
-```
-
-</details>
-
 ### go get
 
 ```console
