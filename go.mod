@@ -2,7 +2,7 @@ module github.com/toshimaru/nyan
 
 go 1.24
 
-toolchain go1.25.2
+toolchain go1.25.4
 
 require (
 	github.com/alecthomas/chroma/v2 v2.20.0
