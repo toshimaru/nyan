@@ -57,16 +57,12 @@ func TestGoldenOutput(t *testing.T) {
 func runNyanAndCapture(t *testing.T, args []string) string {
 	t.Helper()
 
-	var o, e bytes.Buffer
 	// Mock terminal to enable highlighting
-	originalIsTerminalFunc := isTerminalFunc
-	isTerminalFunc = func(fd uintptr) bool { return true }
-	defer func() {
-		isTerminalFunc = originalIsTerminalFunc
-		resetStrings()
-		resetFlags()
-	}()
+	setupTerminalMock(t)
+	t.Cleanup(resetStrings)
+	t.Cleanup(resetFlags)
 
+	var o, e bytes.Buffer
 	rootCmd.SetArgs(args)
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
