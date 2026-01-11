@@ -153,15 +153,15 @@ func TestCompletionDisabled(t *testing.T) {
 }
 
 func TestThemes(t *testing.T) {
-	setupTerminalMockWithStrings(t)
+	setupTerminalMock(t)
 	var o, e bytes.Buffer
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
 
 	t.Run("Valid Theme", func(t *testing.T) {
+		t.Cleanup(resetStrings)
 		rootCmd.SetArgs([]string{"testdata/dummy.go", "--theme", "vim"})
 		err := rootCmd.Execute()
-		resetStrings()
 
 		assert.NoError(t, err)
 		assert.Empty(t, e.String())
@@ -170,10 +170,10 @@ func TestThemes(t *testing.T) {
 	})
 
 	t.Run("Invalid Theme", func(t *testing.T) {
+		t.Cleanup(resetStrings)
 		o.Reset()
 		rootCmd.SetArgs([]string{"testdata/dummy.go", "--theme", "invalid"})
 		err := rootCmd.Execute()
-		resetStrings()
 
 		assert.NoError(t, err)
 		assert.Empty(t, e.String())
