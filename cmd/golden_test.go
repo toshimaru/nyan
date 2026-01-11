@@ -75,24 +75,43 @@ func compareOrUpdateGolden(t *testing.T, goldenPath, actual string) {
 		"Output does not match golden file %s\nRun 'go test ./cmd -run TestGolden -update' to update golden files", goldenPath)
 }
 
-// TestGoldenOutput tests syntax highlighting output against golden files for all themes.
+// TestGoldenOutput tests syntax highlighting output against golden files.
 func TestGoldenOutput(t *testing.T) {
-	for _, themeName := range styles.Names() {
-		t.Run(themeName, func(t *testing.T) {
-			goldenPath := goldenFilePath(themeName)
-			args := []string{"--theme", themeName, "testdata/dummy.go"}
+	tests := []struct {
+		name       string
+		args       []string
+		goldenName string
+	}{}
 
-			actual := runNyanAndCapture(t, args)
+	// Add test cases for all themes
+	for _, themeName := range styles.Names() {
+		tests = append(tests, struct {
+			name       string
+			args       []string
+			goldenName string
+		}{
+			name:       themeName,
+			args:       []string{"--theme", themeName, "testdata/dummy.go"},
+			goldenName: themeName,
+		})
+	}
+
+	// Add line-numbered output test
+	tests = append(tests, struct {
+		name       string
+		args       []string
+		goldenName string
+	}{
+		name:       "monokai-numbered",
+		args:       []string{"--theme", "monokai", "--number", "testdata/dummy.go"},
+		goldenName: "monokai-numbered",
+	})
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			goldenPath := goldenFilePath(tt.goldenName)
+			actual := runNyanAndCapture(t, tt.args)
 			compareOrUpdateGolden(t, goldenPath, actual)
 		})
 	}
-}
-
-// TestGoldenOutputWithLineNumbers tests line-numbered output against golden file.
-func TestGoldenOutputWithLineNumbers(t *testing.T) {
-	goldenPath := goldenFilePath("monokai-numbered")
-	args := []string{"--theme", "monokai", "--number", "testdata/dummy.go"}
-
-	actual := runNyanAndCapture(t, args)
-	compareOrUpdateGolden(t, goldenPath, actual)
 }
