@@ -183,15 +183,14 @@ func TestThemes(t *testing.T) {
 }
 
 func TestSpecialFlags(t *testing.T) {
-	t.Cleanup(resetFlags)
 	var o, e bytes.Buffer
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
 
 	t.Run("version Flag", func(t *testing.T) {
+		t.Cleanup(resetFlags)
 		rootCmd.SetArgs([]string{"--version"})
 		err := rootCmd.Execute()
-		resetFlags()
 
 		assert.NoError(t, err)
 		assert.Empty(t, e.String())
@@ -201,10 +200,10 @@ func TestSpecialFlags(t *testing.T) {
 	})
 
 	t.Run("listThemes Flag", func(t *testing.T) {
+		t.Cleanup(resetFlags)
 		o.Reset()
 		rootCmd.SetArgs([]string{"--list-themes"})
 		err := rootCmd.Execute()
-		resetFlags()
 
 		assert.NoError(t, err)
 		assert.Empty(t, e.String())
@@ -215,10 +214,10 @@ func TestSpecialFlags(t *testing.T) {
 	})
 
 	t.Run("multiple flags", func(t *testing.T) {
+		t.Cleanup(resetFlags)
 		o.Reset()
 		rootCmd.SetArgs([]string{"--version", "--list-themes"})
 		err := rootCmd.Execute()
-		resetFlags()
 
 		assert.NoError(t, err)
 		assert.Empty(t, e.String())
