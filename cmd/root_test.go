@@ -16,9 +16,9 @@ const (
 )
 
 func TestExecute(t *testing.T) {
+	defer resetFlags()
 	rootCmd.SetArgs([]string{"--help"})
 	Execute()
-	resetFlags()
 }
 
 func TestCommandExecute(t *testing.T) {
@@ -28,12 +28,12 @@ func TestCommandExecute(t *testing.T) {
 }
 
 func TestHelpCommand(t *testing.T) {
+	defer resetFlags()
 	var o, e bytes.Buffer
 	rootCmd.SetArgs([]string{"--help"})
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
-	resetFlags()
 
 	assert.Nil(t, err)
 	assert.Empty(t, e.String())
@@ -56,7 +56,11 @@ func TestInvalidFilename(t *testing.T) {
 
 func TestCmdExecute(t *testing.T) {
 	var o, e bytes.Buffer
+	originalIsTerminalFunc := isTerminalFunc
 	isTerminalFunc = func(fd uintptr) bool { return true }
+	defer func() {
+		isTerminalFunc = originalIsTerminalFunc
+	}()
 	rootCmd.SetArgs([]string{"testdata/dummy.go"})
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
@@ -70,7 +74,11 @@ func TestCmdExecute(t *testing.T) {
 
 func TestUnknownExtension(t *testing.T) {
 	var o, e bytes.Buffer
+	originalIsTerminalFunc := isTerminalFunc
 	isTerminalFunc = func(fd uintptr) bool { return true }
+	defer func() {
+		isTerminalFunc = originalIsTerminalFunc
+	}()
 	rootCmd.SetArgs([]string{"testdata/dummy.go.unknown"})
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
@@ -84,12 +92,16 @@ func TestUnknownExtension(t *testing.T) {
 
 func TestLanguageOption(t *testing.T) {
 	var o, e bytes.Buffer
+	originalIsTerminalFunc := isTerminalFunc
 	isTerminalFunc = func(fd uintptr) bool { return true }
+	defer func() {
+		isTerminalFunc = originalIsTerminalFunc
+		resetStrings()
+	}()
 	rootCmd.SetArgs([]string{"--language", "go", "testdata/dummy.go.unknown"})
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
-	resetStrings()
 
 	assert.Nil(t, err)
 	assert.Empty(t, e.String())
@@ -99,12 +111,16 @@ func TestLanguageOption(t *testing.T) {
 
 func TestInvlaidLanguageOption(t *testing.T) {
 	var o, e bytes.Buffer
+	originalIsTerminalFunc := isTerminalFunc
 	isTerminalFunc = func(fd uintptr) bool { return true }
+	defer func() {
+		isTerminalFunc = originalIsTerminalFunc
+		resetStrings()
+	}()
 	rootCmd.SetArgs([]string{"--language", "invalid_lang", "testdata/dummy.go"})
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
 	err := rootCmd.Execute()
-	resetStrings()
 
 	assert.Nil(t, err)
 	assert.Empty(t, e.String())
@@ -114,7 +130,11 @@ func TestInvlaidLanguageOption(t *testing.T) {
 
 func TestMultipleFiles(t *testing.T) {
 	var o, e bytes.Buffer
+	originalIsTerminalFunc := isTerminalFunc
 	isTerminalFunc = func(fd uintptr) bool { return true }
+	defer func() {
+		isTerminalFunc = originalIsTerminalFunc
+	}()
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "testdata/dummy.go.unknown"})
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
@@ -129,7 +149,11 @@ func TestMultipleFiles(t *testing.T) {
 
 func TestMultipleFilesWithInvalidFileError(t *testing.T) {
 	var o, e bytes.Buffer
+	originalIsTerminalFunc := isTerminalFunc
 	isTerminalFunc = func(fd uintptr) bool { return true }
+	defer func() {
+		isTerminalFunc = originalIsTerminalFunc
+	}()
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "InvalidFilename", "testdata/dummyfile"})
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
@@ -138,10 +162,9 @@ func TestMultipleFilesWithInvalidFileError(t *testing.T) {
 	assert.Error(t, err)
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
-	assert.Contains(t, o.String(), "[38;5;231mThis is dummy.[0m")
+	assert.Contains(t, o.String(), "\033[38;5;231mThis is dummy.\033[0m")
 	assert.Contains(t, e.String(), invalidFileErrorMsg())
 }
-
 func TestCompletionDisabled(t *testing.T) {
 	var o, e bytes.Buffer
 	rootCmd.SetArgs([]string{"completion"})
@@ -156,7 +179,12 @@ func TestCompletionDisabled(t *testing.T) {
 
 func testThemes(t *testing.T) {
 	var o, e bytes.Buffer
+	originalIsTerminalFunc := isTerminalFunc
 	isTerminalFunc = func(fd uintptr) bool { return true }
+	defer func() {
+		isTerminalFunc = originalIsTerminalFunc
+		resetStrings()
+	}()
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
 
@@ -185,6 +213,7 @@ func testThemes(t *testing.T) {
 }
 
 func TestSpecialFlags(t *testing.T) {
+	defer resetFlags()
 	var o, e bytes.Buffer
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
@@ -245,7 +274,11 @@ func TestUnknownFile(t *testing.T) {
 func TestFromStdIn(t *testing.T) {
 	i := bytes.NewBufferString("package main")
 	var o, e bytes.Buffer
+	originalIsTerminalFunc := isTerminalFunc
 	isTerminalFunc = func(fd uintptr) bool { return true }
+	defer func() {
+		isTerminalFunc = originalIsTerminalFunc
+	}()
 	rootCmd.SetArgs([]string{"--theme", "monokai"})
 	rootCmd.SetIn(i)
 	rootCmd.SetOut(&o)
@@ -261,7 +294,12 @@ func TestFromStdIn(t *testing.T) {
 func TestFromStdInWithLanguageOption(t *testing.T) {
 	i := bytes.NewBufferString("package main")
 	var o, e bytes.Buffer
+	originalIsTerminalFunc := isTerminalFunc
 	isTerminalFunc = func(fd uintptr) bool { return true }
+	defer func() {
+		isTerminalFunc = originalIsTerminalFunc
+		resetStrings()
+	}()
 	rootCmd.SetArgs([]string{"--theme", "monokai", "--language", "go"})
 	rootCmd.SetIn(i)
 	rootCmd.SetOut(&o)
