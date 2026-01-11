@@ -96,7 +96,7 @@ func TestLanguageOption(t *testing.T) {
 	assert.Contains(t, o.String(), highlightedGoCode)
 }
 
-func TestInvlaidLanguageOption(t *testing.T) {
+func TestInvalidLanguageOption(t *testing.T) {
 	setupTerminalMockWithStrings(t)
 	var o, e bytes.Buffer
 	rootCmd.SetArgs([]string{"--language", "invalid_lang", "testdata/dummy.go"})
@@ -169,7 +169,7 @@ func testThemes(t *testing.T) {
 		assert.Contains(t, o.String(), "[38;5;164mpackage[0m")
 	})
 
-	t.Run("Inalid Theme", func(t *testing.T) {
+	t.Run("Invalid Theme", func(t *testing.T) {
 		o.Reset()
 		rootCmd.SetArgs([]string{"testdata/dummy.go", "--theme", "invalid"})
 		err := rootCmd.Execute()
