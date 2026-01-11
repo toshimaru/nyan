@@ -7,7 +7,6 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/mattn/go-isatty"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/toshimaru/nyan/styles"
@@ -78,9 +77,6 @@ func compareOrUpdateGolden(t *testing.T, goldenPath, actual string) {
 
 // TestGoldenOutput tests syntax highlighting output against golden files for all themes.
 func TestGoldenOutput(t *testing.T) {
-	// Restore isTerminalFunc after all subtests
-	defer func() { isTerminalFunc = isatty.IsTerminal }()
-
 	for _, themeName := range styles.Names() {
 		t.Run(themeName, func(t *testing.T) {
 			goldenPath := goldenFilePath(themeName)
@@ -94,9 +90,6 @@ func TestGoldenOutput(t *testing.T) {
 
 // TestGoldenOutputWithLineNumbers tests line-numbered output against golden file.
 func TestGoldenOutputWithLineNumbers(t *testing.T) {
-	// Restore isTerminalFunc after test
-	defer func() { isTerminalFunc = isatty.IsTerminal }()
-
 	goldenPath := goldenFilePath("monokai-numbered")
 	args := []string{"--theme", "monokai", "--number", "testdata/dummy.go"}
 
