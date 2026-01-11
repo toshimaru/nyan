@@ -61,7 +61,11 @@ func runNyanAndCapture(t *testing.T, args []string) string {
 	// Mock terminal to enable highlighting
 	originalIsTerminalFunc := isTerminalFunc
 	isTerminalFunc = func(fd uintptr) bool { return true }
-	defer func() { isTerminalFunc = originalIsTerminalFunc }()
+	defer func() {
+		isTerminalFunc = originalIsTerminalFunc
+		resetStrings()
+		resetFlags()
+	}()
 
 	rootCmd.SetArgs(args)
 	rootCmd.SetOut(&o)
@@ -71,10 +75,6 @@ func runNyanAndCapture(t *testing.T, args []string) string {
 
 	require.NoError(t, err)
 	require.Empty(t, e.String())
-
-	// Reset flags after execution
-	resetStrings()
-	resetFlags()
 
 	return o.String()
 }

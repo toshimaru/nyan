@@ -318,6 +318,7 @@ func TestNumberOption(t *testing.T) {
 func resetFlags() {
 	showVersion = false
 	listThemes = false
+	number = false
 	rootCmd.Flags().Set("help", "false")
 }
 
