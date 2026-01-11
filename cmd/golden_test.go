@@ -18,6 +18,38 @@ var updateGolden = flag.Bool("update", false, "update golden files")
 
 const goldenDir = "testdata/golden"
 
+type goldenTestCase struct {
+	name string
+	args []string
+}
+
+// TestGoldenOutput tests syntax highlighting output against golden files.
+func TestGoldenOutput(t *testing.T) {
+	var tests []goldenTestCase
+
+	// Add test cases for all themes
+	for _, themeName := range styles.Names() {
+		tests = append(tests, goldenTestCase{
+			name: themeName,
+			args: []string{"--theme", themeName, "testdata/dummy.go"},
+		})
+	}
+
+	// Add line-numbered output test
+	tests = append(tests, goldenTestCase{
+		name: "monokai-numbered",
+		args: []string{"--theme", "monokai", "--number", "testdata/dummy.go"},
+	})
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			goldenPath := goldenFilePath(tt.name)
+			actual := runNyanAndCapture(t, tt.args)
+			compareOrUpdateGolden(t, goldenPath, actual)
+		})
+	}
+}
+
 // goldenFilePath returns the path to a golden file for the given name.
 func goldenFilePath(name string) string {
 	return filepath.Join(goldenDir, name+".golden")
@@ -73,45 +105,4 @@ func compareOrUpdateGolden(t *testing.T, goldenPath, actual string) {
 	// Compare
 	assert.Equal(t, string(expected), actual,
 		"Output does not match golden file %s\nRun 'go test ./cmd -run TestGolden -update' to update golden files", goldenPath)
-}
-
-// TestGoldenOutput tests syntax highlighting output against golden files.
-func TestGoldenOutput(t *testing.T) {
-	tests := []struct {
-		name       string
-		args       []string
-		goldenName string
-	}{}
-
-	// Add test cases for all themes
-	for _, themeName := range styles.Names() {
-		tests = append(tests, struct {
-			name       string
-			args       []string
-			goldenName string
-		}{
-			name:       themeName,
-			args:       []string{"--theme", themeName, "testdata/dummy.go"},
-			goldenName: themeName,
-		})
-	}
-
-	// Add line-numbered output test
-	tests = append(tests, struct {
-		name       string
-		args       []string
-		goldenName string
-	}{
-		name:       "monokai-numbered",
-		args:       []string{"--theme", "monokai", "--number", "testdata/dummy.go"},
-		goldenName: "monokai-numbered",
-	})
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			goldenPath := goldenFilePath(tt.goldenName)
-			actual := runNyanAndCapture(t, tt.args)
-			compareOrUpdateGolden(t, goldenPath, actual)
-		})
-	}
 }
