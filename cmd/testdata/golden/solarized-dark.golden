@@ -1,0 +1,9 @@
+[38;5;70mpackage[0m main
+
+[38;5;70mimport[0m (
+	[38;5;36m"fmt"[0m
+)
+
+[38;5;32mfunc[0m [38;5;32mmain[0m() {
+	fmt.[38;5;32mPrintln[0m([38;5;36m"Hello World"[0m)
+}

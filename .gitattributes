@@ -1,0 +1,2 @@
+# Golden files contain ANSI escape sequences - treat as binary to avoid line-ending issues
+cmd/testdata/golden/*.golden binary

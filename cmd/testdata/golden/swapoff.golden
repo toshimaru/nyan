@@ -1,0 +1,9 @@
+[1m[38;5;231mpackage[0m main
+
+[1m[38;5;231mimport[0m (
+	[1m[38;5;51m"fmt"[0m
+)
+
+[1m[38;5;231mfunc[0m main() {
+	fmt.Println([1m[38;5;51m"Hello World"[0m)
+}
