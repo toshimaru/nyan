@@ -152,7 +152,7 @@ func TestCompletionDisabled(t *testing.T) {
 	assert.Empty(t, o.String())
 }
 
-func testThemes(t *testing.T) {
+func TestThemes(t *testing.T) {
 	setupTerminalMockWithStrings(t)
 	var o, e bytes.Buffer
 	rootCmd.SetOut(&o)
