@@ -46,16 +46,11 @@ func TestGoldenOutput(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			goldenPath := goldenFilePath(tt.name)
+			goldenPath := filepath.Join(goldenDir, tt.name+".golden")
 			actual := runNyanAndCapture(t, tt.args)
 			compareOrUpdateGolden(t, goldenPath, actual)
 		})
 	}
-}
-
-// goldenFilePath returns the path to a golden file for the given name.
-func goldenFilePath(name string) string {
-	return filepath.Join(goldenDir, name+".golden")
 }
 
 // runNyanAndCapture executes nyan with the given arguments and captures output.
@@ -90,8 +85,7 @@ func compareOrUpdateGolden(t *testing.T, goldenPath, actual string) {
 
 	if *updateGolden {
 		// Ensure directory exists
-		dir := filepath.Dir(goldenPath)
-		err := os.MkdirAll(dir, 0755)
+		err := os.MkdirAll(goldenDir, 0755)
 		require.NoError(t, err, "failed to create golden directory")
 
 		// Write the golden file
