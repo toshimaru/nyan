@@ -16,7 +16,7 @@ const (
 )
 
 func TestExecute(t *testing.T) {
-	defer resetFlags()
+	t.Cleanup(resetFlags)
 	rootCmd.SetArgs([]string{"--help"})
 	Execute()
 }
@@ -28,7 +28,7 @@ func TestCommandExecute(t *testing.T) {
 }
 
 func TestHelpCommand(t *testing.T) {
-	defer resetFlags()
+	t.Cleanup(resetFlags)
 	var o, e bytes.Buffer
 	rootCmd.SetArgs([]string{"--help"})
 	rootCmd.SetOut(&o)
@@ -55,12 +55,8 @@ func TestInvalidFilename(t *testing.T) {
 }
 
 func TestCmdExecute(t *testing.T) {
+	setupTerminalMock(t)
 	var o, e bytes.Buffer
-	originalIsTerminalFunc := isTerminalFunc
-	isTerminalFunc = func(fd uintptr) bool { return true }
-	defer func() {
-		isTerminalFunc = originalIsTerminalFunc
-	}()
 	rootCmd.SetArgs([]string{"testdata/dummy.go"})
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
@@ -73,12 +69,8 @@ func TestCmdExecute(t *testing.T) {
 }
 
 func TestUnknownExtension(t *testing.T) {
+	setupTerminalMock(t)
 	var o, e bytes.Buffer
-	originalIsTerminalFunc := isTerminalFunc
-	isTerminalFunc = func(fd uintptr) bool { return true }
-	defer func() {
-		isTerminalFunc = originalIsTerminalFunc
-	}()
 	rootCmd.SetArgs([]string{"testdata/dummy.go.unknown"})
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
@@ -91,13 +83,8 @@ func TestUnknownExtension(t *testing.T) {
 }
 
 func TestLanguageOption(t *testing.T) {
+	setupTerminalMockWithStrings(t)
 	var o, e bytes.Buffer
-	originalIsTerminalFunc := isTerminalFunc
-	isTerminalFunc = func(fd uintptr) bool { return true }
-	defer func() {
-		isTerminalFunc = originalIsTerminalFunc
-		resetStrings()
-	}()
 	rootCmd.SetArgs([]string{"--language", "go", "testdata/dummy.go.unknown"})
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
@@ -110,13 +97,8 @@ func TestLanguageOption(t *testing.T) {
 }
 
 func TestInvlaidLanguageOption(t *testing.T) {
+	setupTerminalMockWithStrings(t)
 	var o, e bytes.Buffer
-	originalIsTerminalFunc := isTerminalFunc
-	isTerminalFunc = func(fd uintptr) bool { return true }
-	defer func() {
-		isTerminalFunc = originalIsTerminalFunc
-		resetStrings()
-	}()
 	rootCmd.SetArgs([]string{"--language", "invalid_lang", "testdata/dummy.go"})
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
@@ -129,12 +111,8 @@ func TestInvlaidLanguageOption(t *testing.T) {
 }
 
 func TestMultipleFiles(t *testing.T) {
+	setupTerminalMock(t)
 	var o, e bytes.Buffer
-	originalIsTerminalFunc := isTerminalFunc
-	isTerminalFunc = func(fd uintptr) bool { return true }
-	defer func() {
-		isTerminalFunc = originalIsTerminalFunc
-	}()
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "testdata/dummy.go.unknown"})
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
@@ -148,12 +126,8 @@ func TestMultipleFiles(t *testing.T) {
 }
 
 func TestMultipleFilesWithInvalidFileError(t *testing.T) {
+	setupTerminalMock(t)
 	var o, e bytes.Buffer
-	originalIsTerminalFunc := isTerminalFunc
-	isTerminalFunc = func(fd uintptr) bool { return true }
-	defer func() {
-		isTerminalFunc = originalIsTerminalFunc
-	}()
 	rootCmd.SetArgs([]string{"testdata/dummy.go", "InvalidFilename", "testdata/dummyfile"})
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
@@ -178,13 +152,8 @@ func TestCompletionDisabled(t *testing.T) {
 }
 
 func testThemes(t *testing.T) {
+	setupTerminalMockWithStrings(t)
 	var o, e bytes.Buffer
-	originalIsTerminalFunc := isTerminalFunc
-	isTerminalFunc = func(fd uintptr) bool { return true }
-	defer func() {
-		isTerminalFunc = originalIsTerminalFunc
-		resetStrings()
-	}()
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
 
@@ -213,7 +182,7 @@ func testThemes(t *testing.T) {
 }
 
 func TestSpecialFlags(t *testing.T) {
-	defer resetFlags()
+	t.Cleanup(resetFlags)
 	var o, e bytes.Buffer
 	rootCmd.SetOut(&o)
 	rootCmd.SetErr(&e)
@@ -272,13 +241,9 @@ func TestUnknownFile(t *testing.T) {
 }
 
 func TestFromStdIn(t *testing.T) {
+	setupTerminalMock(t)
 	i := bytes.NewBufferString("package main")
 	var o, e bytes.Buffer
-	originalIsTerminalFunc := isTerminalFunc
-	isTerminalFunc = func(fd uintptr) bool { return true }
-	defer func() {
-		isTerminalFunc = originalIsTerminalFunc
-	}()
 	rootCmd.SetArgs([]string{"--theme", "monokai"})
 	rootCmd.SetIn(i)
 	rootCmd.SetOut(&o)
@@ -292,14 +257,9 @@ func TestFromStdIn(t *testing.T) {
 }
 
 func TestFromStdInWithLanguageOption(t *testing.T) {
+	setupTerminalMockWithStrings(t)
 	i := bytes.NewBufferString("package main")
 	var o, e bytes.Buffer
-	originalIsTerminalFunc := isTerminalFunc
-	isTerminalFunc = func(fd uintptr) bool { return true }
-	defer func() {
-		isTerminalFunc = originalIsTerminalFunc
-		resetStrings()
-	}()
 	rootCmd.SetArgs([]string{"--theme", "monokai", "--language", "go"})
 	rootCmd.SetIn(i)
 	rootCmd.SetOut(&o)
@@ -351,6 +311,21 @@ func TestNumberOption(t *testing.T) {
 	if strings.Contains(lastLine, "\n") {
 		t.Fatal("The EOF has an unnecessary line break")
 	}
+}
+
+func setupTerminalMock(t *testing.T) {
+	t.Helper()
+	originalIsTerminalFunc := isTerminalFunc
+	isTerminalFunc = func(fd uintptr) bool { return true }
+	t.Cleanup(func() {
+		isTerminalFunc = originalIsTerminalFunc
+	})
+}
+
+func setupTerminalMockWithStrings(t *testing.T) {
+	t.Helper()
+	setupTerminalMock(t)
+	t.Cleanup(resetStrings)
 }
 
 func resetFlags() {
