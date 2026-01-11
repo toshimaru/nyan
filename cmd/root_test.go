@@ -136,9 +136,10 @@ func TestMultipleFilesWithInvalidFileError(t *testing.T) {
 	assert.Error(t, err)
 	assert.NotNil(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
-	assert.Contains(t, o.String(), "\033[38;5;231mThis is dummy.\033[0m")
+	assert.Contains(t, o.String(), "[38;5;231mThis is dummy.[0m")
 	assert.Contains(t, e.String(), invalidFileErrorMsg())
 }
+
 func TestCompletionDisabled(t *testing.T) {
 	var o, e bytes.Buffer
 	rootCmd.SetArgs([]string{"completion"})
