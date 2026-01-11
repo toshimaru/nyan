@@ -16,7 +16,10 @@ import (
 // Usage: go test ./cmd -run TestGolden -update
 var updateGolden = flag.Bool("update", false, "update golden files")
 
-const goldenDir = "testdata/golden"
+const (
+	goldenDir    = "testdata/golden"
+	testDataFile = "testdata/dummy.go"
+)
 
 type goldenTestCase struct {
 	name string
@@ -31,14 +34,14 @@ func TestGoldenOutput(t *testing.T) {
 	for _, themeName := range styles.Names() {
 		tests = append(tests, goldenTestCase{
 			name: themeName,
-			args: []string{"--theme", themeName, "testdata/dummy.go"},
+			args: []string{"--theme", themeName, testDataFile},
 		})
 	}
 
 	// Add line-numbered output test
 	tests = append(tests, goldenTestCase{
 		name: "monokai-numbered",
-		args: []string{"--theme", "monokai", "--number", "testdata/dummy.go"},
+		args: []string{"--theme", "monokai", "--number", testDataFile},
 	})
 
 	for _, tt := range tests {
