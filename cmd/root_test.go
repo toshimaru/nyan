@@ -64,7 +64,7 @@ func TestCmdExecute(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Empty(t, e.String())
-	assert.NotNil(t, o.String())
+	assert.NotEmpty(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
 }
 
@@ -78,7 +78,7 @@ func TestUnknownExtension(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Empty(t, e.String())
-	assert.NotNil(t, o.String())
+	assert.NotEmpty(t, o.String())
 	assert.Contains(t, o.String(), _unhighlightedGoCode())
 }
 
@@ -92,7 +92,7 @@ func TestLanguageOption(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Empty(t, e.String())
-	assert.NotNil(t, o.String())
+	assert.NotEmpty(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
 }
 
@@ -106,7 +106,7 @@ func TestInvalidLanguageOption(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Empty(t, e.String())
-	assert.NotNil(t, o.String())
+	assert.NotEmpty(t, o.String())
 	assert.Contains(t, o.String(), _unhighlightedGoCode())
 }
 
@@ -120,7 +120,7 @@ func TestMultipleFiles(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Empty(t, e.String())
-	assert.NotNil(t, o.String())
+	assert.NotEmpty(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
 	assert.Contains(t, o.String(), _unhighlightedGoCode())
 }
@@ -134,7 +134,7 @@ func TestMultipleFilesWithInvalidFileError(t *testing.T) {
 	err := rootCmd.Execute()
 
 	assert.Error(t, err)
-	assert.NotNil(t, o.String())
+	assert.NotEmpty(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
 	assert.Contains(t, o.String(), "[38;5;231mThis is dummy.[0m")
 	assert.Contains(t, e.String(), invalidFileErrorMsg())
@@ -165,7 +165,7 @@ func TestThemes(t *testing.T) {
 
 		assert.Nil(t, err)
 		assert.Empty(t, e.String())
-		assert.NotNil(t, o.String())
+		assert.NotEmpty(t, o.String())
 		assert.Contains(t, o.String(), "[38;5;164mpackage[0m")
 	})
 
@@ -177,7 +177,7 @@ func TestThemes(t *testing.T) {
 
 		assert.Nil(t, err)
 		assert.Empty(t, e.String())
-		assert.NotNil(t, o.String())
+		assert.NotEmpty(t, o.String())
 		assert.Contains(t, o.String(), "[1m[38;5;231mpackage")
 	})
 }
@@ -195,7 +195,7 @@ func TestSpecialFlags(t *testing.T) {
 
 		assert.Nil(t, err)
 		assert.Empty(t, e.String())
-		assert.NotNil(t, o.String())
+		assert.NotEmpty(t, o.String())
 		assert.Contains(t, o.String(), "version ")
 		assert.NotContains(t, o.String(), "Theme: ")
 	})
@@ -208,7 +208,7 @@ func TestSpecialFlags(t *testing.T) {
 
 		assert.Nil(t, err)
 		assert.Empty(t, e.String())
-		assert.NotNil(t, o.String())
+		assert.NotEmpty(t, o.String())
 		assert.Contains(t, o.String(), "Theme: ")
 		assert.Contains(t, o.String(), "Sample Code in Go")
 		assert.NotContains(t, o.String(), "version ")
@@ -222,7 +222,7 @@ func TestSpecialFlags(t *testing.T) {
 
 		assert.Nil(t, err)
 		assert.Empty(t, e.String())
-		assert.NotNil(t, o.String())
+		assert.NotEmpty(t, o.String())
 		assert.Contains(t, o.String(), "version ")
 		assert.NotContains(t, o.String(), "Theme: ")
 	})
@@ -237,7 +237,7 @@ func TestUnknownFile(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Empty(t, e.String())
-	assert.NotNil(t, o.String())
+	assert.NotEmpty(t, o.String())
 	assert.Contains(t, o.String(), "This is dummy.")
 }
 
@@ -253,7 +253,7 @@ func TestFromStdIn(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Empty(t, e.String())
-	assert.NotNil(t, o.String())
+	assert.NotEmpty(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
 }
 
@@ -269,7 +269,7 @@ func TestFromStdInWithLanguageOption(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Empty(t, e.String())
-	assert.NotNil(t, o.String())
+	assert.NotEmpty(t, o.String())
 	assert.Contains(t, o.String(), highlightedGoCode)
 }
 
@@ -284,7 +284,7 @@ func TestFromStdInWithDash(t *testing.T) {
 
 	assert.Nil(t, err)
 	assert.Empty(t, e.String())
-	assert.NotNil(t, o.String())
+	assert.NotEmpty(t, o.String())
 	assert.Contains(t, o.String(), "TestFromStdIn")
 }
 
