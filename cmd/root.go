@@ -78,6 +78,9 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 			return err
 		}
 		if lexer == nil {
+			lexer = detectShebang(data)
+		}
+		if lexer == nil {
 			lexer = lexers.Analyse(string(data))
 		}
 		printData(&data, cmd, lexer)
@@ -91,6 +94,10 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 			}
 			if language == "" {
 				lexer = lexers.Match(filename)
+				if lexer == nil {
+					lexer = lexers.Analyse(string(data))
+					// lexer = detectShebang((data))
+				}
 			}
 			printData(&data, cmd, lexer)
 		}
@@ -99,6 +106,65 @@ func cmdMain(cmd *cobra.Command, args []string) (err error) {
 		}
 	}
 	return
+}
+
+func detectShebang(data []byte) chroma.Lexer {
+	if len(data) < 2 || data[0] != '#' || data[1] != '!' {
+		return nil
+	}
+
+	// Find the end of the first line
+	endIdx := bytes.IndexByte(data, '\n')
+	if endIdx == -1 {
+		endIdx = len(data)
+	}
+
+	shebangLine := bytes.TrimSpace(data[2:endIdx]) // Skip "#!"
+
+	// Parse interpreter from shebang
+	var interpreter string
+	if bytes.Contains(shebangLine, []byte("/env ")) {
+		// Handle "/usr/bin/env python3" format
+		parts := bytes.Fields(shebangLine)
+		if len(parts) >= 2 {
+			interpreter = string(parts[1])
+		}
+	} else {
+		// Handle "/bin/bash" format
+		parts := bytes.Split(shebangLine, []byte("/"))
+		if len(parts) > 0 {
+			lastPart := parts[len(parts)-1]
+			// Remove any arguments after space
+			if idx := bytes.IndexByte(lastPart, ' '); idx != -1 {
+				lastPart = lastPart[:idx]
+			}
+			interpreter = string(lastPart)
+		}
+	}
+
+	// Map interpreter to lexer
+	interpreterMap := map[string]string{
+		"bash":    "bash",
+		"sh":      "bash",
+		"zsh":     "bash",
+		"ksh":     "bash",
+		"python":  "python",
+		"python3": "python",
+		"python2": "python",
+		"ruby":    "ruby",
+		"perl":    "perl",
+		"node":    "javascript",
+		"nodejs":  "javascript",
+		"php":     "php",
+		"lua":     "lua",
+		"awk":     "awk",
+	}
+
+	if lexerName, ok := interpreterMap[interpreter]; ok {
+		return lexers.Get(lexerName)
+	}
+
+	return nil
 }
 
 func printData(data *[]byte, cmd *cobra.Command, lexer chroma.Lexer) {

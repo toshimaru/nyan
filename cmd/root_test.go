@@ -353,3 +353,132 @@ func _unhighlightedGoCode() string {
 	}
 	return unhighlightedGoCode
 }
+
+func TestDetectShebang(t *testing.T) {
+	t.Run("Bash shebang", func(t *testing.T) {
+		data := []byte("#!/bin/bash\necho 'hello'")
+		lexer := detectShebang(data)
+		assert.NotNil(t, lexer)
+		assert.Contains(t, lexer.Config().Name, "Bash")
+	})
+
+	t.Run("Python3 with env", func(t *testing.T) {
+		data := []byte("#!/usr/bin/env python3\nprint('hello')")
+		lexer := detectShebang(data)
+		assert.NotNil(t, lexer)
+		assert.Contains(t, lexer.Config().Name, "Python")
+	})
+
+	t.Run("Ruby shebang", func(t *testing.T) {
+		data := []byte("#!/usr/bin/ruby\nputs 'hello'")
+		lexer := detectShebang(data)
+		assert.NotNil(t, lexer)
+		assert.Contains(t, lexer.Config().Name, "Ruby")
+	})
+
+	t.Run("Node with env", func(t *testing.T) {
+		data := []byte("#!/usr/bin/env node\nconsole.log('hello')")
+		lexer := detectShebang(data)
+		assert.NotNil(t, lexer)
+		assert.Contains(t, lexer.Config().Name, "JavaScript")
+	})
+
+	t.Run("Sh shebang", func(t *testing.T) {
+		data := []byte("#!/bin/sh\necho 'hello'")
+		lexer := detectShebang(data)
+		assert.NotNil(t, lexer)
+		assert.Contains(t, lexer.Config().Name, "Bash")
+	})
+
+	t.Run("Perl shebang", func(t *testing.T) {
+		data := []byte("#!/usr/bin/perl\nprint 'hello'")
+		lexer := detectShebang(data)
+		assert.NotNil(t, lexer)
+		assert.Contains(t, lexer.Config().Name, "Perl")
+	})
+
+	t.Run("No shebang", func(t *testing.T) {
+		data := []byte("echo 'hello'")
+		lexer := detectShebang(data)
+		assert.Nil(t, lexer)
+	})
+
+	t.Run("Comment but not shebang", func(t *testing.T) {
+		data := []byte("# This is a comment\necho 'hello'")
+		lexer := detectShebang(data)
+		assert.Nil(t, lexer)
+	})
+
+	t.Run("Unknown interpreter", func(t *testing.T) {
+		data := []byte("#!/bin/unknowninterpreter\necho 'hello'")
+		lexer := detectShebang(data)
+		assert.Nil(t, lexer)
+	})
+
+	t.Run("Shebang with arguments", func(t *testing.T) {
+		data := []byte("#!/bin/bash -e\necho 'hello'")
+		lexer := detectShebang(data)
+		assert.NotNil(t, lexer)
+		assert.Contains(t, lexer.Config().Name, "Bash")
+	})
+
+	t.Run("Empty file", func(t *testing.T) {
+		data := []byte("")
+		lexer := detectShebang(data)
+		assert.Nil(t, lexer)
+	})
+}
+
+func TestShebangFileDetection(t *testing.T) {
+	setupTerminalMock(t)
+
+	t.Run("Bash script without extension", func(t *testing.T) {
+		var o, e bytes.Buffer
+		rootCmd.SetArgs([]string{"testdata/bashscript"})
+		rootCmd.SetOut(&o)
+		rootCmd.SetErr(&e)
+		err := rootCmd.Execute()
+
+		assert.NoError(t, err)
+		assert.Empty(t, e.String())
+		assert.NotEmpty(t, o.String())
+		// Should be syntax highlighted as bash
+		assert.Contains(t, o.String(), "[38;5;")
+	})
+
+	t.Run("Python script without extension", func(t *testing.T) {
+		t.Cleanup(resetStrings)
+		var o, e bytes.Buffer
+		rootCmd.SetArgs([]string{"testdata/pythonscript"})
+		rootCmd.SetOut(&o)
+		rootCmd.SetErr(&e)
+		err := rootCmd.Execute()
+
+		assert.NoError(t, err)
+		assert.Empty(t, e.String())
+		assert.NotEmpty(t, o.String())
+		// Should be syntax highlighted as python
+		assert.Contains(t, o.String(), "[38;5;")
+	})
+}
+
+func TestShebangFromStdin(t *testing.T) {
+	setupTerminalMock(t)
+
+	t.Run("Bash script from stdin", func(t *testing.T) {
+		t.Cleanup(resetStrings)
+		i := bytes.NewBufferString("#!/bin/bash\necho 'hello'")
+		var o, e bytes.Buffer
+		rootCmd.SetArgs([]string{})
+		rootCmd.SetIn(i)
+		rootCmd.SetOut(&o)
+		rootCmd.SetErr(&e)
+		err := rootCmd.Execute()
+
+		assert.NoError(t, err)
+		assert.Empty(t, e.String())
+		assert.NotEmpty(t, o.String())
+		// Should be syntax highlighted
+		assert.Contains(t, o.String(), "[38;5;")
+	})
+}
