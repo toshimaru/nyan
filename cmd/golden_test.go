@@ -9,7 +9,6 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/toshimaru/nyan/styles"
 )
 
 // updateGolden flag allows regenerating golden files.
@@ -30,8 +29,20 @@ type goldenTestCase struct {
 func TestGoldenOutput(t *testing.T) {
 	var tests []goldenTestCase
 
-	// Add test cases for all themes
-	for _, themeName := range styles.Names() {
+	// Add test cases for supported themes
+	themeNames := []string{
+		"abap",
+		"dracula",
+		"emacs",
+		"monokai",
+		"monokailight",
+		"pygments",
+		"solarized-dark",
+		"solarized-light",
+		"swapoff",
+		"vim",
+	}
+	for _, themeName := range themeNames {
 		tests = append(tests, goldenTestCase{
 			name: themeName,
 			args: []string{"--theme", themeName, testDataFile},

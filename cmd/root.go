@@ -9,10 +9,10 @@ import (
 	"github.com/alecthomas/chroma/v2"
 	"github.com/alecthomas/chroma/v2/formatters"
 	"github.com/alecthomas/chroma/v2/lexers"
+	"github.com/alecthomas/chroma/v2/styles"
 	"github.com/mattn/go-colorable"
 	"github.com/mattn/go-isatty"
 	"github.com/spf13/cobra"
-	"github.com/toshimaru/nyan/styles"
 )
 
 var (
@@ -118,10 +118,21 @@ func printData(data *[]byte, cmd *cobra.Command, lexer chroma.Lexer) {
 		}
 		iterator, _ := lexer.Tokenise(nil, string(*data))
 		formatter := formatters.Get("terminal256")
-		formatter.Format(out, styles.Get(theme), iterator)
+		formatter.Format(out, terminalStyle(theme), iterator)
 	} else {
 		fmt.Fprint(out, string(*data))
 	}
+}
+
+func terminalStyle(name string) *chroma.Style {
+	style, err := styles.Get(name).
+		Builder().
+		Add(chroma.Background, "noinherit").
+		Build()
+	if err != nil {
+		panic(err)
+	}
+	return style
 }
 
 func checkSpecialFlags(cmd *cobra.Command) bool {
