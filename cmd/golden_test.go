@@ -7,9 +7,9 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/alecthomas/chroma/v2/styles"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/toshimaru/nyan/styles"
 )
 
 // updateGolden flag allows regenerating golden files.
