@@ -118,10 +118,21 @@ func printData(data *[]byte, cmd *cobra.Command, lexer chroma.Lexer) {
 		}
 		iterator, _ := lexer.Tokenise(nil, string(*data))
 		formatter := formatters.Get("terminal256")
-		formatter.Format(out, styles.Get(theme), iterator)
+		formatter.Format(out, terminalStyle(theme), iterator)
 	} else {
 		fmt.Fprint(out, string(*data))
 	}
+}
+
+func terminalStyle(name string) *chroma.Style {
+	style, err := styles.Get(name).
+		Builder().
+		Add(chroma.Background, "noinherit").
+		Build()
+	if err != nil {
+		panic(err)
+	}
+	return style
 }
 
 func checkSpecialFlags(cmd *cobra.Command) bool {
